@@ -11,4 +11,6 @@ export default {
     ItemsView
   }
 }
+
+
 </script>
