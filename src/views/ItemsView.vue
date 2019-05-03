@@ -127,7 +127,7 @@ export default {
             this.$Progress.start();
             this.loading = true;
 
-            axios.get('https://localhost:44358/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value)
+            axios.get('http://fireplatformgui-001-site1.atempurl.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value)
                 .then(response => {
 
                     var updatedItems = response.data.item2;

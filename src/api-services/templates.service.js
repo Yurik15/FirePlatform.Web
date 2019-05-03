@@ -1,7 +1,7 @@
 import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
-const env = 'https://localhost:44358';
+const env = 'http://fireplatformgui-001-site1.atempurl.com/';
  
 export default {
   getAll() {
