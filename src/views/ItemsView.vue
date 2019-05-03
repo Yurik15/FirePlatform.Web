@@ -1,6 +1,5 @@
 <template>
 <div class="page">
-
     <TheNavbar></TheNavbar>
     <div class="row">
         <div class="col-sm-2">
@@ -11,15 +10,17 @@
                 <b-card class="cardOverride" no-body v-for="(item, index) in mainCollection" v-bind:value="item.Value" :key="index">
 
                     <body>
-                        <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride" header-tag="header" role="tab">
-                            <b-btn class="blockOverride" block href="#" v-b-toggle="'collapse' + index" variant="info" v-model="item.name">{{item.title}}</b-btn>
-                        </b-card-header>
+                        <div v-if="item.isVisible === true">
+                            <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride" header-tag="header" role="tab">
+                                <b-btn class="blockOverride" aria-expanded="true" block href="#" v-b-toggle="'collapse' + index" variant="info" v-model="item.name">{{item.title}}</b-btn>
+                            </b-card-header>
+                        </div>
                         <b-collapse :id="'collapse' + index" accordion="my-accordion" role="tabpanel">
                             <b-card-body>
                                 <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items" v-bind:value="itemDetails.Value" :key="index">
-  <div v-if="itemDetails.isVisible === true">
-   <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center">
-<label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
+                                    <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
+                                        <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center">
+                                            <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
     <input  class = "itemDetailsValue form-control" :disabled="loading" type="text" 
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value" />
 </div>
@@ -47,15 +48,15 @@
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
   </div>
 </div>
-<div v-else-if="itemDetails.type === 'Combo'" class="d-flex justify-content-center">
+<div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <div class="itemDetailsValue">
       <select class="form-control" :disabled="loading" v-model="selectedItem"
-      @change="recalculate(itemDetails.groupID, itemDetails.numID, selectedItem.comboItemTag.split(',')[0])"> 
+      @change="recalculate(itemDetails.groupID, itemDetails.numID, selectedItem.groupKey)"> 
         <option   
-            v-for="(selectedItem, index) in (itemDetails ? itemDetails.multiItemDict : [])" 
+            v-for="(selectedItem, index) in (itemDetails.comboItems)" 
             v-bind:value="selectedItem" :key="index">
-            {{selectedItem.comboItemTitle}}
+            {{selectedItem.displayName}}
         </option>
       </select>
 </div>
@@ -116,12 +117,11 @@ export default {
     data: () => ({
         mainCollection: [],
         loading: false,
-        backCalcsHidden: false
+        backCalcsHidden: false,
+        selectedItem: '',
+        itemDetails: []
     }),
     methods: {
-        some(ev) {
-            alert(ev);
-        },
         recalculate: function (groupId, itemId, value) {
 
             this.$Progress.start();
@@ -130,11 +130,26 @@ export default {
             axios.get('https://localhost:44358/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value)
                 .then(response => {
 
-                    var items = response.data.item2;
-                    items.forEach(newItem => {
+                    var updatedItems = response.data.item2;
+                    var updatedGroupItems = response.data.item1;
+
+                    //update groups
+                    updatedGroupItems.forEach(newGroupItem => {
+                        this.mainCollection.forEach(groupItem => {
+                            if(groupItem.indexGroup === newGroupItem.indexGroup)
+                            {
+                                groupItem.isVisible = newGroupItem.isVisible;
+                            }
+                        });
+                    });
+                    //alert(JSON.stringify(this.mainCollection));
+
+                    //update items 
+                    updatedItems.forEach(newItem => {
 
                         var isExists = false;
                         this.mainCollection.forEach(itemGroup => {
+
                             itemGroup.items.forEach(item => {
                                 if (item.numID === newItem.numID &&
                                     item.groupID === newItem.groupID) {
@@ -171,7 +186,8 @@ export default {
                     this.loading = false;
                     this.$Progress.fail();
 
-                    this.errors.push(e);
+                    alert(e.toString());
+                    //this.errors.push(e);
                 })
         },
         hideBackCalcs(hidden) {
