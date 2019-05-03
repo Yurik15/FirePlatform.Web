@@ -3,18 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-	"start": "node server.js",
-	"heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build",
+    "start": "node server.js",
+    "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "ajv": "^5.0.0",
+    "ajv": "^6.9.1",
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
-    "bootstrap-vue": "^2.0.0-rc.11",
-    "jquery": "^3.3.1",
+    "bootstrap-vue": "^2.0.0-rc.19",
+    "express": "^4.16.4",
+    "jquery": "^3.4.1",
     "nprogress": "^0.2.0",
     "popper.js": "^1.14.6",
     "vue": "^2.5.21",
@@ -27,7 +28,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.3.0",
     "@vue/cli-plugin-eslint": "^3.3.0",
-    "@vue/cli-service": "^3.3.0",
+    "@vue/cli-service": "^3.7.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0",
