@@ -6,17 +6,18 @@
         </div>
         <div class="col-sm-7">
             <div role="tablist" class="cardList">
-                <h3 class="d-flex justify-content-center">Element list</h3>
+
                 <b-card class="cardOverride" no-body v-for="(item, index) in mainCollection" v-bind:value="item.Value" :key="index">
 
                     <body>
                         <div v-if="item.isVisible === true">
                             <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride" header-tag="header" role="tab">
-                                <b-btn class="blockOverride" aria-expanded="true" block href="#" v-b-toggle="'collapse' + index" variant="info" v-model="item.name">{{item.title}}</b-btn>
+                                <b-btn  v-b-toggle="'collapse' + index" class="blockOverride" :aria-expanded="item.expanded" block href="#" data-target="#'collapse'+ index" data-toggle="'collapse' + index" variant="info" aria-controls="'collapse' + index">{{item.title}}</b-btn>
                             </b-card-header>
                         </div>
-                        <b-collapse :id="'collapse' + index" accordion="my-accordion" role="tabpanel">
+                        <b-collapse :id="'collapse' + index" role="tabpanel" v-model="item.expanded">
                             <b-card-body>
+
                                 <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items" v-bind:value="itemDetails.Value" :key="index">
                                     <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center">
@@ -51,12 +52,12 @@
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <div class="itemDetailsValue">
-      <select class="form-control" :disabled="loading" v-model="selectedItem"
-      @change="recalculate(itemDetails.groupID, itemDetails.numID, selectedItem.groupKey)"> 
+      <select class="form-control" :disabled="loading" v-model="item.value"
+      @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
-            v-bind:value="selectedItem" :key="index">
-            {{selectedItem.displayName}}
+            v-bind:value="selectedItem.comboItems" :key="index">
+            {{selectedItem.displayName.split(SEPARATOR)[0]}}
         </option>
       </select>
 </div>
@@ -93,7 +94,7 @@
         </b-card>
     </div>
 </div>
-<div class="col-sm-3 cardList">
+<div class="col-sm-3 cardList" style="display:none">
     <label  class = "itemOptionsTitle">Hide BackCalcs</label>
     <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
         v-model="backCalcsHidden" @change="hideBackCalcs(backCalcsHidden)"/>
@@ -108,6 +109,7 @@ import TheNavbar from '@/components/TheNavbar.vue'
 import {
     serverBus
 } from '../main.js';
+import { stringify } from 'querystring';
 
 export default {
     name: 'ItemsView',
@@ -115,19 +117,72 @@ export default {
         TheNavbar
     },
     data: () => ({
+        SEPARATOR: 'sepComboItem',
         mainCollection: [],
         loading: false,
         backCalcsHidden: false,
         selectedItem: '',
-        itemDetails: []
+        item: {
+            comboItems: [],
+            value: ''
+        },
+        comboItemSelected:{
+            list:
+            [
+                {
+                    groupId: '',
+                    itemId: '',
+                    value: '',
+                    index: ''
+                }
+            ]
+        }
     }),
     methods: {
-        recalculate: function (groupId, itemId, value) {
+        recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
 
             this.$Progress.start();
             this.loading = true;
+        
 
-            axios.get('http://fireplatformgui-001-site1.atempurl.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value)
+            if(isComboBox === true){
+                var childNodes = e.currentTarget.childNodes;
+                var i = 0;
+                childNodes.forEach(el => {
+                    if(el.selected === true)
+                    {
+                        indexOfComboItem = i;
+                        value = el.text;
+                    }
+                    i++;
+                });   
+            }    
+            //search value of combo
+
+            this.mainCollection.forEach(itemGroup => {
+
+                                itemGroup.items.forEach(item => {
+                                    if (item.numID === itemId &&
+                                    item.groupID === groupId) {
+                                     item.comboItems.forEach(comboItem => {
+                                            if(comboItem.displayName.split(this.SEPARATOR)[0] === value){
+                                                value = comboItem.groupKey;
+                                            }
+                                        })
+                                }
+                            })
+            })
+
+            var itemHistory = 
+            {
+                groupId: groupId,
+                itemId: itemId,
+                value: value,
+                index: indexOfComboItem
+            }
+            this.comboItemSelected.list.push(itemHistory);
+               
+            axios.get('http://fireplatformgui-001-site1.atempurl.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
@@ -136,16 +191,15 @@ export default {
                     //update groups
                     updatedGroupItems.forEach(newGroupItem => {
                         this.mainCollection.forEach(groupItem => {
-                            if(groupItem.indexGroup === newGroupItem.indexGroup)
-                            {
+                            if (groupItem.indexGroup === newGroupItem.indexGroup) {
                                 groupItem.isVisible = newGroupItem.isVisible;
+                                groupItem.expanded = newGroupItem.expanded;
                             }
                         });
                     });
                     //alert(JSON.stringify(this.mainCollection));
 
-                    //update items 
-                    updatedItems.forEach(newItem => {
+                        updatedItems.forEach(newItem => {
 
                         var isExists = false;
                         this.mainCollection.forEach(itemGroup => {
@@ -163,20 +217,42 @@ export default {
                                     item.tooltipText = newItem.tooltipText;
                                     item.value = newItem.value;
 
-                                    isExists = true;
+                                    if(item.type === 'Combo'){
+                                        item.comboItems.forEach(comboItem => {
+                                             if(comboItem.displayName.includes(this.SEPARATOR) === false)
+                                            {
+                                            comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
+                                            }
+                                        })
+                                    }
                                 }
                             })
                         });
-
+ 
                         if (!isExists) {
                             this.mainCollection.forEach(itemGroup => {
                                 if (itemGroup.indexGroup === newItem.groupID) {
-                                    alert("group: " + newItem.groupID + " item: " + newItem.title + " value: " + newItem.value);
                                     itemGroup.items.push(newItem);
                                 }
                             })
                         }
                     });
+
+                     //update comboitems positions
+
+                        this.comboItemSelected.list.forEach(selected => {
+
+                            this.mainCollection.forEach(itemGroup => {
+
+                                itemGroup.items.forEach(item => {
+                                    if (item.numID === selected.itemId &&
+                                    item.groupID === selected.groupId) {
+                                    
+                                    this.updateComboItems(item.comboItems, selected.index);
+                                }
+                            })
+                        });
+                         });
 
                     this.loading = false;
                     this.$Progress.finish();
@@ -186,7 +262,7 @@ export default {
                     this.loading = false;
                     this.$Progress.fail();
 
-                    alert(e.toString());
+                    alert("an error occured, details: " + e.toString());
                     //this.errors.push(e);
                 })
         },
@@ -197,12 +273,40 @@ export default {
                 this.hideBackCalcs = "none";
             }
 
+        },
+        updateComboItems: function(comboItems, index){
+            this.item.comboItems = Object.assign({}, this.item.comboItems, comboItems);
+            this.item.value = this.item.comboItems[index].displayName;
+              alert(JSON.stringify(this.item.comboItems));
+            alert(this.item.value); 
         }
     },
     created() {
         serverBus.$on('itemsGroup', (mainCollection) => {
-            this.mainCollection = mainCollection;
-        })
+                this.mainCollection = mainCollection;
+                this.mainCollection.forEach(itemGroup => {
+
+                            itemGroup.items.forEach(item => {
+                                if (item.type === 'Combo' && item.isVisible === true)
+                                {
+                                        item.comboItems.forEach(comboItem => {
+                                            if(comboItem.displayName.includes(this.SEPARATOR) === false)
+                                            {
+                                                comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
+                                            }
+                                        })
+                                    this.updateComboItems(item.comboItems, 1);
+                                }
+                            })
+                        });                
+            }),
+            serverBus.$on('collapseAlElements', () => {
+                this.mainCollection
+                    .forEach(groupItem => {
+                                groupItem.expanded = false;
+                        });
+
+            })
     }
 }
 </script>

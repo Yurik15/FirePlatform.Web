@@ -6,17 +6,30 @@
     <span class="navbar-toggler-icon"></span>
   </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item dropdown">
+            <ul class="navbar-nav " style="width: 100%" >
+      
+
+                <li class="nav-item dropdown menuDropDown">
                     <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Templates
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
-                            <button class="menuButton" type="button" v-on:click="getTemplate(template.id)">{{template.name}}</button>
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id)">{{template.name}}</button>
                         </li>
                     </ul>
                 </li>
+                 <li class="nav-item dropdown menuDropDown">
+                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Options
+        </a>
+                    <div class="dropdown-menu " aria-labelledby="navbarDropdown">
+                    <a v-link='{name: "home"}' v-on:click="collapseAlElements()" class="dropdown-item" href="#">Collapse all</a>
+                    <a class="dropdown-item" href="#">Hide BackCalcs</a>
+                </div>
+                </li>
+   
+  
             </ul>
         </div>
     </nav>
@@ -48,7 +61,10 @@ export default {
                 .catch(e => {
                     this.errors.push(e)
                 })
-        }
+        },
+        collapseAlElements: function () {
+                    serverBus.$emit('collapseAlElements');              
+        },
     },
     created() {
         this.$Progress.start()
@@ -70,6 +86,12 @@ export default {
 .menuButton {
     color: #e28822;
     background-color: #343a40;
-    width: 100%
+}
+.menuDropDown{
+    background-color: #343a40 !important;
+}
+
+.menuList{
+    box-sizing: content-box !important;
 }
 </style>
