@@ -277,8 +277,8 @@ export default {
         updateComboItems: function(comboItems, index){
             this.item.comboItems = Object.assign({}, this.item.comboItems, comboItems);
             this.item.value = this.item.comboItems[index].displayName;
-              alert(JSON.stringify(this.item.comboItems));
-            alert(this.item.value); 
+              //alert(JSON.stringify(this.item.comboItems));
+            //alert(this.item.value); 
         }
     },
     created() {
