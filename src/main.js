@@ -17,8 +17,9 @@ Vue.use(VueProgressBar, {
   failedColor: 'red',
   height: '10px', 
   transition: {
-    speed: '0.001s',
-    opacity: '1'
+    speed: '1s',
+    opacity: '2s',
+    termination: 300
   },
 })
 
