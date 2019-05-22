@@ -12,6 +12,7 @@ import VueProgressBar from 'vue-progressbar';
 
 window.axios = require('axios');
 
+
 Vue.use(VueProgressBar, {
   color: 'rgb(143, 255, 199)',
   failedColor: 'red',
@@ -26,7 +27,8 @@ Vue.use(VueProgressBar, {
 Vue.use(BootstrapVue);
 Vue.use(Collapse);
 
-Vue.config.productionTip = false
+Vue.config.assets.compile = true;
+Vue.config.productionTip = false;
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;
 export const serverBus = new Vue();
