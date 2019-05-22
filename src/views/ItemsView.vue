@@ -51,7 +51,8 @@
 </div>
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-      <select class="itemDetailsValue form-control" :disabled="loading" v-model="item.value"
+     <div class="itemDetailsValue">
+      <select class=" form-control" :disabled="loading" v-model="item.value"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
@@ -59,6 +60,7 @@
             {{selectedItem.displayName.split(SEPARATOR)[0]}}
         </option>
       </select>
+      </div>
 </div>
 <div v-else-if="itemDetails.type === 5" class="d-flex justify-content-center">
    <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
@@ -312,87 +314,4 @@ body {
 }
 
 
-.blockOverride
-{
-   width: 100% !important;
-}
-
-.itemDetailsValue
-{
-   height: 30px; 
-   width: 50%; 
-   margin-left: 5px
-}
-
-.itemDetailsTitle
-{
-   height: 20px; 
-   width: 50%; 
-   margin-left: 30px
-}
-
-.itemDetailsValueCheckBox
-{
-   height: 30px; 
-   width: 30%; 
-}
-
-.cardHeaderOverride
-{
-  border-bottom: none !important;
-  background-color:#e9ebee !important
-}
-
-.cardOverride
-{
-  border: none !important;
-}
-
-.cardList
-{
-  padding: 0.5rem !important;
-}
-
-.header
-{
-  text-align: center !important;
-}
-
-.page
-{
-  background-color: #e9ebee !important
-}
-
-.btn-info {
-    color: #e28822 !important;
-    background-color: #343a40 !important;
-}
-
-.navibarText
-{
-    color: #e28822 !important;
-}
-
-.navibarLogo
-{
-    font-family: Arial, Helvetica, sans-serif;
-    color: #e28822 !important;
-}
-.itemDetailsValueMultiSelect
-{
-   height: 90px; 
-   width: 30%; 
-   margin-left: 20px
-}
-
-.itemDetailsValueMultiSelectElement
-{
-    height: 100% !important;
-}
-
-.itemDetailsRadioButton
-{
-   width: 30%; 
-   margin-left: 20px
-}
 </style>

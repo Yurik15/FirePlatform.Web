@@ -3,7 +3,7 @@ import App from './App.vue'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-//import './styles/FirePlatform.css'
+import './styles/FirePlatform.css'
 import BootstrapVue from 'bootstrap-vue'
 import { Collapse } from 'bootstrap-vue/es/components';
 import Axios from 'axios';
