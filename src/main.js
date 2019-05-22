@@ -3,7 +3,7 @@ import App from './App.vue'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './styles/FirePlatform.css'
+//import './styles/FirePlatform.css'
 import BootstrapVue from 'bootstrap-vue'
 import { Collapse } from 'bootstrap-vue/es/components';
 import Axios from 'axios';
@@ -11,7 +11,6 @@ import '../node_modules/nprogress/nprogress.css'
 import VueProgressBar from 'vue-progressbar';
 
 window.axios = require('axios');
-
 
 Vue.use(VueProgressBar, {
   color: 'rgb(143, 255, 199)',
@@ -27,8 +26,6 @@ Vue.use(VueProgressBar, {
 Vue.use(BootstrapVue);
 Vue.use(Collapse);
 
-Vue.config.assets.compile = true;
-Vue.config.productionTip = false;
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;
 export const serverBus = new Vue();

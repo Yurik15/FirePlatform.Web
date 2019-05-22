@@ -51,8 +51,7 @@
 </div>
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <div class="itemDetailsValue">
-      <select class="form-control" :disabled="loading" v-model="item.value"
+      <select class="itemDetailsValue form-control" :disabled="loading" v-model="item.value"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
@@ -60,7 +59,6 @@
             {{selectedItem.displayName.split(SEPARATOR)[0]}}
         </option>
       </select>
-</div>
 </div>
 <div v-else-if="itemDetails.type === 5" class="d-flex justify-content-center">
    <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
@@ -144,7 +142,7 @@ export default {
             this.$Progress.start();
             this.loading = true;
         
-
+            //alert(value);
             if(isComboBox === true){
                 var childNodes = e.currentTarget.childNodes;
                 var i = 0;
@@ -156,7 +154,7 @@ export default {
                     }
                     i++;
                 });   
-            }    
+
             //search value of combo
 
             this.mainCollection.forEach(itemGroup => {
@@ -172,6 +170,7 @@ export default {
                                 }
                             })
             })
+            }   
 
             var itemHistory = 
             {
@@ -217,11 +216,13 @@ export default {
                                     item.tooltipText = newItem.tooltipText;
                                     item.value = newItem.value;
 
+                                    isExists = true;
+
                                     if(item.type === 'Combo'){
                                         item.comboItems.forEach(comboItem => {
                                              if(comboItem.displayName.includes(this.SEPARATOR) === false)
                                             {
-                                            comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
+                                                comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
                                             }
                                         })
                                     }
@@ -240,19 +241,7 @@ export default {
 
                      //update comboitems positions
 
-                        this.comboItemSelected.list.forEach(selected => {
-
-                            this.mainCollection.forEach(itemGroup => {
-
-                                itemGroup.items.forEach(item => {
-                                    if (item.numID === selected.itemId &&
-                                    item.groupID === selected.groupId) {
-                                    
-                                    this.updateComboItems(item.comboItems, selected.index);
-                                }
-                            })
-                        });
-                         });
+                        
 
                     this.loading = false;
                     this.$Progress.finish();
