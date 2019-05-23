@@ -12,7 +12,7 @@
   "dependencies": {
     "ajv": "^6.9.1",
     "axios": "^0.18.0",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.19",
     "express": "^4.16.4",
     "jquery": "^3.4.1",
@@ -21,6 +21,7 @@
     "vue": "^2.5.21",
     "vue-axios": "^2.1.4",
     "vue-bootstrap-collapse": "^1.0.1",
+    "vue-jquery": "^1.0.6",
     "vue-progressbar": "^0.7.5",
     "vue-tree-navigation": "^4.0.1",
     "vuex": "^3.1.0"

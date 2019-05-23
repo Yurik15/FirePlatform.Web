@@ -21,14 +21,14 @@
                                 <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items" v-bind:value="itemDetails.Value" :key="index">
                                     <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center">
-                                            <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <input  class = "itemDetailsValue form-control" :disabled="loading" type="text" 
-    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value" />
+                                            <label   class = "itemDetailsTitle" v-text = "itemDetails.title"/>
+    <p class = "itemDetailsValue form-control" :disabled="true" type="text" style="height: 100% !important"
+    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
 </div>
   <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center">    
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <input class = "itemDetailsValue form-control" :disabled="true" type="text" 
-    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value" />
+    <p class = "itemDetailsValue form-control" :disabled="true" type="text" style="height: 100% !important"
+    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
 </div>
  <div v-else-if="itemDetails.type === 'BackCalcs'" class="d-flex justify-content-center">    
   <div v-if="backCalcsHidden === false">
@@ -44,19 +44,19 @@
 </div>
 <div v-else-if="itemDetails.type === 'Check'" class="d-flex justify-content-center">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <div class="itemDetailsValue">
+  <div class="itemDetailsValue ">
   <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
   </div>
 </div>
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-     <div class="itemDetailsValue">
-      <select class=" form-control" :disabled="loading" v-model="item.value"
+     <div class="itemDetailsValue itemDetailsTitleText">
+      <select :placeholder="placer" id="someId" class="someClass itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
-            v-bind:value="selectedItem.comboItems" :key="index">
+            :value="selectedItem.displayName" :key="index">
             {{selectedItem.displayName.split(SEPARATOR)[0]}}
         </option>
       </select>
@@ -113,6 +113,7 @@ import { stringify } from 'querystring';
 
 export default {
     name: 'ItemsView',
+    placer: 'asdas',
     components: {
         TheNavbar
     },
@@ -120,30 +121,15 @@ export default {
         SEPARATOR: 'sepComboItem',
         mainCollection: [],
         loading: false,
-        backCalcsHidden: false,
-        selectedItem: '',
-        item: {
-            comboItems: [],
-            value: ''
-        },
-        comboItemSelected:{
-            list:
-            [
-                {
-                    groupId: '',
-                    itemId: '',
-                    value: '',
-                    index: ''
-                }
-            ]
-        }
+        backCalcsHidden: false
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
 
             this.$Progress.start();
             this.loading = true;
-        
+
+
             //alert(value);
             if(isComboBox === true){
                 var childNodes = e.currentTarget.childNodes;
@@ -174,16 +160,8 @@ export default {
             })
             }   
 
-            var itemHistory = 
-            {
-                groupId: groupId,
-                itemId: itemId,
-                value: value,
-                index: indexOfComboItem
-            }
-            this.comboItemSelected.list.push(itemHistory);
                
-            axios.get('http://fireplatformgui-001-site1.atempurl.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get('https://localhost:44358/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
@@ -198,7 +176,6 @@ export default {
                             }
                         });
                     });
-                    //alert(JSON.stringify(this.mainCollection));
 
                         updatedItems.forEach(newItem => {
 
@@ -232,19 +209,8 @@ export default {
                             })
                         });
  
-                        if (!isExists) {
-                            this.mainCollection.forEach(itemGroup => {
-                                if (itemGroup.indexGroup === newItem.groupID) {
-                                    itemGroup.items.push(newItem);
-                                }
-                            })
-                        }
                     });
-
-                     //update comboitems positions
-
-                        
-
+                
                     this.loading = false;
                     this.$Progress.finish();
 
@@ -254,7 +220,6 @@ export default {
                     this.$Progress.fail();
 
                     alert("an error occured, details: " + e.toString());
-                    //this.errors.push(e);
                 })
         },
         hideBackCalcs(hidden) {
@@ -266,14 +231,15 @@ export default {
 
         },
         updateComboItems: function(comboItems, index){
-            this.item.comboItems = Object.assign({}, this.item.comboItems, comboItems);
+            var newcomboItems = Object.assign({}, this.item.comboItems, comboItems);
+            this.item.comboItems.push(newcomboItems);
             this.item.value = this.item.comboItems[index].displayName;
-              //alert(JSON.stringify(this.item.comboItems));
-            //alert(this.item.value); 
+            alert(JSON.stringify(this.item.comboItems));
+            alert(this.item.value); 
         }
     },
     created() {
-        serverBus.$on('itemsGroup', (mainCollection) => {
+                serverBus.$on('itemsGroup', (mainCollection) => {
                 this.mainCollection = mainCollection;
                 this.mainCollection.forEach(itemGroup => {
 
@@ -289,7 +255,7 @@ export default {
                                     this.updateComboItems(item.comboItems, 1);
                                 }
                             })
-                        });                
+                        });             
             }),
             serverBus.$on('collapseAlElements', () => {
                 this.mainCollection
@@ -298,6 +264,11 @@ export default {
                         });
 
             })
+           
+    },
+    mounted(e){
+
+              this.updateComboItems(item.comboItems, 1);
     }
 }
 </script>

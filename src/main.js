@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import vueJquery from '../node_modules/vue-jquery'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -8,7 +9,8 @@ import BootstrapVue from 'bootstrap-vue'
 import { Collapse } from 'bootstrap-vue/es/components';
 import Axios from 'axios';
 import '../node_modules/nprogress/nprogress.css'
-import VueProgressBar from 'vue-progressbar';
+import VueProgressBar from 'vue-progressbar'
+
 
 window.axios = require('axios');
 
@@ -25,6 +27,7 @@ Vue.use(VueProgressBar, {
 
 Vue.use(BootstrapVue);
 Vue.use(Collapse);
+Vue.use(vueJquery);
 
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;
@@ -35,6 +38,7 @@ new Vue({
 }).$mount('#app')
 
 // Intercept all requests
+window.$ = window.jQuery = require('jquery')
 window.axios.interceptors.request.use(
   (config) => {
    // do something before sending requests

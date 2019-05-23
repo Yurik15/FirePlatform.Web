@@ -6,11 +6,14 @@
 
 .itemDetailsValue
 {
-   height: 30px; 
+   height:30 px; 
    width: 55%; 
    margin-left: 5px
 }
 
+.itemDetailsTitleText{
+   font-size:15px;
+}
 .itemDetailsTitle
 {
    height: 20px; 
@@ -20,7 +23,7 @@
 
 .itemDetailsValueCheckBox
 {
-   height: 30px; 
+   height: 20px; 
    width: 30%; 
 }
 
