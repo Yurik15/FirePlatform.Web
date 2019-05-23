@@ -129,8 +129,6 @@ export default {
             this.$Progress.start();
             this.loading = true;
 
-
-            //alert(value);
             if(isComboBox === true){
                 var childNodes = e.currentTarget.childNodes;
                 var i = 0;
@@ -234,8 +232,7 @@ export default {
             var newcomboItems = Object.assign({}, this.item.comboItems, comboItems);
             this.item.comboItems.push(newcomboItems);
             this.item.value = this.item.comboItems[index].displayName;
-            alert(JSON.stringify(this.item.comboItems));
-            alert(this.item.value); 
+          
         }
     },
     created() {
