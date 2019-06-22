@@ -159,7 +159,7 @@ export default {
             }   
 
                
-            axios.get('http://fireplatformgui-001-site1.atempurl.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get('https://feisty-vector-244012.appspot.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
@@ -217,7 +217,7 @@ export default {
                     this.loading = false;
                     this.$Progress.fail();
 
-                    alert("an error occured, details: " + e.toString());
+                    //alert("an error occured, details: " + e.toString());
                 })
         },
         hideBackCalcs(hidden) {
