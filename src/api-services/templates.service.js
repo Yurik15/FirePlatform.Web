@@ -1,7 +1,7 @@
 import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
-const env = 'https://localhost:44358';
+const env = 'https://feisty-vector-244012.appspot.com';
  
 export default {
   getAll() {
