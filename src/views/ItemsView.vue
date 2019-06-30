@@ -2,57 +2,61 @@
 <div class="page">
     <TheNavbar></TheNavbar>
     <div class="row">
-        <div class="col-sm-2">
+        <div class="col-sm-1">
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-10">
             <div role="tablist" class="cardList">
 
                 <b-card class="cardOverride" no-body v-for="(item, index) in mainCollection" v-bind:value="item.Value" :key="index">
 
                     <body>
                         <div v-if="item.isVisible === true">
-                            <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride" header-tag="header" role="tab">
+                            <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride headerElementRaw" header-tag="header" role="tab">
                                 <b-btn  v-b-toggle="'collapse' + index" class="blockOverride" :aria-expanded="item.expanded" block href="#" data-target="#'collapse'+ index" data-toggle="'collapse' + index" variant="info" aria-controls="'collapse' + index">{{item.title}}</b-btn>
                             </b-card-header>
                         </div>
                         <b-collapse :id="'collapse' + index" role="tabpanel" v-model="item.expanded">
-                            <b-card-body>
-
+                            <b-card-body class="divCard">
+                            <div >
                                 <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items" v-bind:value="itemDetails.Value" :key="index">
                                     <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
-                                        <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center">
-                                            <label   class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <p class = "itemDetailsValue form-control" :disabled="true" type="text" style="height: 100% !important"
+                                        <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center elementRaw">
+    
+                                            <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>                                     
+    <p class = "itemDetailsValue textFormula form-control" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
+    <div class="input-group-append elementRaw">
+    <i class="fas fa-chevron-circle-down"></i>
+  </div>
 </div>
-  <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center">    
+  <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center elementRaw">    
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <p class = "itemDetailsValue form-control" :disabled="true" type="text" style="height: 100% !important"
+    <p class = "itemDetailsValue textFormula form-control" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
 </div>
- <div v-else-if="itemDetails.type === 'BackCalcs'" class="d-flex justify-content-center">    
+ <div v-else-if="itemDetails.type === 'BackCalcs'" class="d-flex justify-content-center elementRaw">    
   <div v-if="backCalcsHidden === false">
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
     <input class = "itemDetailsValue form-control" :disabled="loading" type="text" 
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value" />
 </div>
 </div>
-<div v-else-if="itemDetails.type === 'Num'" class="d-flex justify-content-center">
+<div v-else-if="itemDetails.type === 'Num'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <input class = "itemDetailsValue form-control" type="number" 
   @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
 </div>
-<div v-else-if="itemDetails.type === 'Check'" class="d-flex justify-content-center">
+<div v-else-if="itemDetails.type === 'Check'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <div class="itemDetailsValue ">
   <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
   </div>
 </div>
-<div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center">
+<div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center elementRaw">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-     <div class="itemDetailsValue itemDetailsTitleText">
-      <select :placeholder="placer" id="someId" class="someClass itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
+     <div class="itemDetailsValue itemDetailsTitleText elementDiv">
+      <select :placeholder="placer" id="someId" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
@@ -61,7 +65,7 @@
         </option>
       </select>
       </div>
-</div>
+      </div>
 <div v-else-if="itemDetails.type === 5" class="d-flex justify-content-center">
    <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <div class="itemDetailsValueMultiSelect">
@@ -88,13 +92,14 @@
                                 </div>
             </div>
         </div>
+                            </div>
         </b-card-body>
         </b-collapse>
         </body>
         </b-card>
     </div>
 </div>
-<div class="col-sm-3 cardList" style="display:none">
+<div class="col-sm-1 cardList" style="display:none">
     <label  class = "itemOptionsTitle">Hide BackCalcs</label>
     <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
         v-model="backCalcsHidden" @change="hideBackCalcs(backCalcsHidden)"/>
@@ -159,7 +164,7 @@ export default {
             }   
 
                
-            axios.get('https://feisty-vector-244012.appspot.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get('https://localhost:44358//api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
