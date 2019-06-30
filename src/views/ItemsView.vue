@@ -164,7 +164,7 @@ export default {
             }   
 
                
-            axios.get('https://feisty-vector-244012.appspot.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get('https://river-lantern-244519.appspot.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
