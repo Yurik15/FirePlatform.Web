@@ -6,7 +6,7 @@
 .itemDetailsValue
 {
    height:30 px; 
-   width: 55%; 
+   width: 40%; 
    margin-left: 5px;
    padding-bottom: 1px !important;
 }
@@ -17,10 +17,11 @@
 }
 .itemDetailsTitle
 {
-   width: 45%; 
+   width: 60%; 
    margin-left: 10px;
    margin-bottom: 1px !important;
    margin-top: -2px;
+   font-size: 13px;
 }
 
 .itemDetailsValueCheckBox
@@ -119,9 +120,11 @@
 {
    height: 30px;
    font-size: 15px !important;   
+   text-align: left;
 }
 .itemDetailsValue.textFormula.form-control
 {
    margin-top: 0px !important;
    margin-bottom: 0px !important;
 }
+
