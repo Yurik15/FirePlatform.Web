@@ -148,8 +148,9 @@ export default {
             })
             }   
 
-               
-            axios.get('https://localhost:44358/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            const env = 'https://river-lantern-244519.appspot.com';
+            //const env = 'https://localhost:44358';
+            axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
