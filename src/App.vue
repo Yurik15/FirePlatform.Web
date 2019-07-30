@@ -1,16 +1,22 @@
+
 <template>
-  <ItemsView/>
+  <div id="app">
+    <nav>
+        <!--<router-link to='/login'>Login</router-link>-->
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import ItemsView from './views/ItemsView.vue'
-
 export default {
   name: 'app',
-  components: {
-    ItemsView
+  created() {
+       this.$router.push('/login');
+    },
+  mounted(){
+    
   }
 }
-
 
 </script>

@@ -1,6 +1,6 @@
 <template>
 <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <vue-progress-bar></vue-progress-bar>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
         </a>
                     <div class="dropdown-menu " aria-labelledby="navbarDropdown">
                     <a v-link='{name: "home"}' v-on:click="collapseAlElements()" class="dropdown-item" href="#">Collapse all</a>
-                    <a class="dropdown-item" href="#">Hide BackCalcs</a>
+                    <a v-on:click="hideBackCalcs()" class="dropdown-item" >Hide BackCalcs</a>
                 </div>
                 </li>
    
@@ -65,6 +65,9 @@ export default {
         collapseAlElements: function () {
                     serverBus.$emit('collapseAlElements');              
         },
+        hideBackCalcs: function () {
+                    serverBus.$emit('hideBackCalcs');              
+        },
     },
     created() {
         this.$Progress.start()
@@ -81,17 +84,3 @@ export default {
     }
 }
 </script>
-
-<style>
-.menuButton {
-    color: #e28822;
-    background-color: #343a40;
-}
-.menuDropDown{
-    background-color: #343a40 !important;
-}
-
-.menuList{
-    box-sizing: content-box !important;
-}
-</style>

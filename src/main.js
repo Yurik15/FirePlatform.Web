@@ -10,7 +10,12 @@ import { Collapse } from 'bootstrap-vue/es/components';
 import Axios from 'axios';
 import '../node_modules/nprogress/nprogress.css'
 import VueProgressBar from 'vue-progressbar'
+import VueRouter from 'vue-router'
+import routes from './routes';
 
+const router = new VueRouter({routes});
+
+Vue.config.productionTip = false;
 
 window.axios = require('axios');
 
@@ -25,6 +30,7 @@ Vue.use(VueProgressBar, {
   },
 })
 
+Vue.use(VueRouter)
 Vue.use(BootstrapVue);
 Vue.use(Collapse);
 Vue.use(vueJquery);
@@ -34,6 +40,7 @@ Axios.defaults.baseURL = process.env.API_ENDPOINT;
 export const serverBus = new Vue();
 
 new Vue({
+  router,
   render: h => h(App),
 }).$mount('#app')
 

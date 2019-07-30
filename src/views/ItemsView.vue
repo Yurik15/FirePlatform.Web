@@ -1,10 +1,12 @@
 <template>
 <div class="page">
+    <div v-if="navbarVisible">
     <TheNavbar></TheNavbar>
+    </div>
     <div class="row">
         <div class="col-sm-1">
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-10 mainSection">
             <div role="tablist" class="cardList">
 
                 <b-card class="cardOverride" no-body v-for="(item, index) in mainCollection" v-bind:value="item.Value" :key="index">
@@ -18,45 +20,51 @@
                         <b-collapse :id="'collapse' + index" role="tabpanel" v-model="item.expanded">
                             <b-card-body class="divCard">
                             <div >
-                                <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items" v-bind:value="itemDetails.Value" :key="index">
+                                <div class="form-group" :id="'collapse' + index" v-for="(itemDetails, index) in item.items"
+                                 v-bind:value="itemDetails.Value" :key="index">
                                     <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center elementRaw">
     
-                                            <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>                                     
-    <p class = "itemDetailsValue textFormula form-control" :disabled="true" type="text" style="height: 100% !important"
-    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
-    <div class="input-group-append elementRaw">
-    <i class="fas fa-chevron-circle-down"></i>
-  </div>
+                                            <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>                                   
+    <p class = "itemDetailsValue textFormula form-control disabledItem" 
+    v-bind:class="{ textFormulaOneLineText:  !showAllTextCollection.includes(itemDetails.numID)}" type="text"
+      @click="calculateShowAllTextForItems(itemDetails.numID)"
+    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type">{{itemDetails.value}}</p>
+  <p>
+</p>
 </div>
   <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center elementRaw">    
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <p class = "itemDetailsValue textFormula form-control" :disabled="true" type="text" style="height: 100% !important"
-    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)">{{itemDetails.value}}</p>
+    <p class = "itemDetailsValue textFormula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
+    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
+    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
  <div v-else-if="itemDetails.type === 'BackCalcs'" class="d-flex justify-content-center elementRaw">    
   <div v-if="backCalcsHidden === false">
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <input class = "itemDetailsValue form-control" :disabled="loading" type="text" 
-    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value" />
+    <input class = "itemDetailsValue form-control disabledItem" :disabled="loading" type="text" 
+    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
+    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" v-model="itemDetails.value" />
 </div>
 </div>
 <div v-else-if="itemDetails.type === 'Num'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <input class = "itemDetailsValue form-control" type="number" 
-  @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
+  @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
+  :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
 </div>
 <div v-else-if="itemDetails.type === 'Check'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <div class="itemDetailsValue ">
   <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
-   @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" v-model="itemDetails.value"/>
+   @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
+   :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
   </div>
 </div>
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center elementRaw">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
-      <select :placeholder="placer" id="someId" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
+      <select :placeholder="placer" :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
@@ -66,30 +74,6 @@
       </select>
       </div>
       </div>
-<div v-else-if="itemDetails.type === 5" class="d-flex justify-content-center">
-   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <div class="itemDetailsValueMultiSelect">
-      <select multiple class="form-control itemDetailsValueMultiSelectElement" :disabled="loading" size="60">
-        <option v-for="(selectedItem, index) in itemDetails.value" 
-         v-bind:value="selectedItem" :key="index">{{selectedItem}}</option>
-        <option>{{selectedItem}}</option>
-      </select>
-</div>
-</div>
-<div v-else-if="itemDetails.type === 6" class="d-flex justify-content-center">
-   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <div class="radio itemDetailsRadioButton">
-      <form>
-         <div class="radio" 
-         v-for="(selectedItem, index) in itemDetails.value" 
-         v-bind:value="selectedItem" :key="index">
-            <label>
-                <input type="radio" name="optradio" :disabled="loading"> {{selectedItem}}
-                </label>
-                                        </div>
-                                        </form>
-                                    </div>
-                                </div>
             </div>
         </div>
                             </div>
@@ -99,12 +83,10 @@
         </b-card>
     </div>
 </div>
-<div class="col-sm-1 cardList" style="display:none">
-    <label  class = "itemOptionsTitle">Hide BackCalcs</label>
-    <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
-        v-model="backCalcsHidden" @change="hideBackCalcs(backCalcsHidden)"/>
+
 </div>
-</div>
+  <div class="col-sm-1">
+        </div>
 </div>
 </template>
 
@@ -126,7 +108,10 @@ export default {
         SEPARATOR: 'sepComboItem',
         mainCollection: [],
         loading: false,
-        backCalcsHidden: false
+        backCalcsHidden: false,
+        navbarVisible: true,
+        navbarVisibleText: 'show',
+        showAllTextCollection: []
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
@@ -164,7 +149,7 @@ export default {
             }   
 
                
-            axios.get('https://river-lantern-244519.appspot.com/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get('https://localhost:44358/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
@@ -175,7 +160,7 @@ export default {
                         this.mainCollection.forEach(groupItem => {
                             if (groupItem.indexGroup === newGroupItem.indexGroup) {
                                 groupItem.isVisible = newGroupItem.isVisible;
-                                groupItem.expanded = newGroupItem.expanded;
+                                //groupItem.expanded = newGroupItem.expanded;
                             }
                         });
                     });
@@ -225,22 +210,39 @@ export default {
                     //alert("an error occured, details: " + e.toString());
                 })
         },
-        hideBackCalcs(hidden) {
-            if (hidden === true) {
-                this.hideBackCalcs = "hidden";
-            } else {
-                this.hideBackCalcs = "none";
-            }
+        hideNavbar() {
+          //  if (this.navbarVisible === true) {
+              //  this.navbarVisible = false;
+               // this.navbarVisibleText = 'show';
+           // } else {
+                //this.navbarVisible = true;
+                //this.navbarVisibleText = 'hide';
+                this.navbarVisibleText = '';
+            //}
 
         },
+        
         updateComboItems: function(comboItems, index){
             var newcomboItems = Object.assign({}, this.item.comboItems, comboItems);
             this.item.comboItems.push(newcomboItems);
             this.item.value = this.item.comboItems[index].displayName;
           
+        },
+        
+        calculateShowAllTextForItems(numID) {
+            if(this.showAllTextCollection.includes(numID)){
+                this.showAllTextCollection.splice(this.showAllTextCollection.indexOf(numID), 1);
+            }
+            else{
+               this.showAllTextCollection.push(numID);
+            }   
         }
+        
     },
     created() {
+                //if session does not work
+                //this.$router.push('/login');
+
                 serverBus.$on('itemsGroup', (mainCollection) => {
                 this.mainCollection = mainCollection;
                 this.mainCollection.forEach(itemGroup => {
@@ -265,26 +267,17 @@ export default {
                                 groupItem.expanded = false;
                         });
 
+            }),
+            serverBus.$on('hideBackCalcs', () => {
+                //alert(this.backCalcsHidden);
+                this.backCalcsHidden = !this.backCalcsHidden;
+               // alert(this.backCalcsHidden);
             })
            
     },
-    mounted(e){
+    mounted(){
 
               this.updateComboItems(item.comboItems, 1);
     }
 }
 </script>
-
-<style>
-body {
-    background-color: #e9ebee !important;
-}
-
-.itemOptionsTitle {
-    height: 30px;
-    width: 30%;
-    padding: 10%;
-}
-
-
-</style>

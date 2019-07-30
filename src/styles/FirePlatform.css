@@ -1,32 +1,49 @@
 .blockOverride
 {
-   width: 100% !important;
+    height: 90%;
+    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 .itemDetailsValue
 {
-   height:30 px; 
-   width: 40%; 
-   margin-left: 5px;
-   padding-bottom: 1px !important;
+   height: auto;
+   font-weight: 500;
+   font-size: 13px;
+   width: 45%; 
+   margin-bottom: 2px;
+   font-weight: 400;
+   margin-top: 2px;
+}
+
+.itemDetailsValue.disabledItem
+{
+   background-color: #e9ebee;
 }
 
 .itemDetailsTitleText{
-   font-size: 13px;
-   padding: none !important;
+   height: 95%;
+   font-size: 15px;
+   font-weight: 400;
+   padding-top: 1px !important;
+   padding-bottom: 1px !important;
 }
 .itemDetailsTitle
 {
-   width: 60%; 
-   margin-left: 10px;
-   margin-bottom: 1px !important;
-   margin-top: -2px;
    font-size: 14px;
+   height: 95%;
+   color: #4a76a8 !important;
+   width: 55%; 
+   margin-left: 5px;
+}
+label.itemDetailsTitle
+{
+   margin-bottom: 5px;
 }
 
 .itemDetailsValueCheckBox
 {
-   height: 90%;
+   height: 95%;
    width: 20px;
 }
 
@@ -43,8 +60,6 @@
   font-size: 10 !important;
 }
 
-
-
 .header
 {
   text-align: center !important;
@@ -52,23 +67,24 @@
 
 .page
 {
+   overflow-x: hidden;
   background-color: #e9ebee !important
 }
 
 .btn-info {
-    color: #e28822 !important;
-    background-color: #343a40 !important;
+    color: #4a76a8 !important;
+    background-color: white !important;
 }
 
 .navibarText
 {
-    color: #e28822 !important;
+    color: white !important;
 }
 
 .navibarLogo
 {
     font-family: Arial, Helvetica, sans-serif;
-    color: #e28822 !important;
+    color:  white !important;
 }
 .itemDetailsValueMultiSelect
 {
@@ -92,39 +108,109 @@
 
 .itemDetailsTitleText .form-control
 {
-   padding: 0.5px;
+   color: black;
+   border: none; 
+   margin-bottom: 3px;
+   height: 95% !important;
 }
 
 .card-body.divCard
 {
    padding: 1px !important;
-   margin-bottom: 1px !important;
    margin-right: 4px;
 }
 
-
-
 .d-flex.justify-content-center.elementRaw
 {
-   margin-bottom: -15px !important;
+   border-bottom: 0.1px solid lightsteelblue !important;
+   margin-left: 5px;
+   margin-right: 5px;
 }
 
 .card-header.d-flex.justify-content-center.p-1.cardHeaderOverride.headerElementRaw
 {
-   margin-bottom: -0px;
-   margin-top: -1px !important;
-   padding: 2px !important;
+
 }
 
 .btn.blockOverride.btn-info.btn-block
 {
-   height: 30px;
-   font-size: 15px !important;   
+   font-size: 15px !important; 
+   font-weight: 600;  
    text-align: left;
+   padding-left: 20%;
 }
 .itemDetailsValue.textFormula.form-control
 {
-   margin-top: 0px !important;
-   margin-bottom: 0px !important;
+   height: 95%;
+   margin-bottom: 3px;
+   padding-left: 1% !important;
+   font-weight: 400;
 }
+.itemDetailsValue.textFormulaOneLineText.form-control
+{
+   text-overflow: ellipsis;
+   overflow: hidden;
+   white-space: nowrap;
+}
+.navbar.navbar-expand-lg
+{
+   background-color: #4a76a8 !important;
+}
+
+.dropdown-item{
+   color: #4a76a8 !important;
+}
+
+.cardList{
+   margin-top: 60px !important;
+}
+
+body {
+   background-color: #e9ebee !important;
+}
+
+.itemOptionsTitle {
+   height: 30px;
+   width: 30%;
+   padding: 10%;
+}
+.menuButton {
+   color: white;
+   background-color: white;
+}
+.menuDropDown{
+   background-color: #4a76a8 !important;
+}
+
+.menuList{
+   box-sizing: content-box !important;
+}
+.form-group{
+   margin-bottom: 2px;
+}
+.card-header.d-flex.justify-content-center.p-1.cardHeaderOverride.headerElementRaw{
+   padding-top: 0.1% !important;
+   padding-bottom: 0.1% !important;
+   padding-left: 0.1% !important;
+   padding-right: 0.1% !important;
+}
+
+@media only screen and (max-width: 768px) {
+   /* For mobile phones: */
+   [class*="col-"] {
+     width: 100%;
+   }
+   .btn.blockOverride.btn-info.btn-block
+{
+   font-size: 15px !important; 
+   font-weight: 600;  
+   text-align: left;
+   padding-left: 2%;
+}
+.col-sm-10.mainSection{
+   padding-right: 4%;
+   padding-left: 4%;
+}
+
+ }
 
