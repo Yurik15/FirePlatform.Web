@@ -1,3 +1,13 @@
+.loginFailedMessage
+{
+    margin-top: 1%;
+    font-size: 14px;
+    height: 30px;
+    margin-bottom: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
 .blockOverride
 {
     height: 90%;
@@ -19,6 +29,12 @@
 .itemDetailsValue.disabledItem
 {
    background-color: #e9ebee;
+}
+
+.picture
+{
+   height: 100px;
+   width: 100px;
 }
 
 .itemDetailsTitleText{
@@ -125,11 +141,6 @@ label.itemDetailsTitle
    border-bottom: 0.1px solid lightsteelblue !important;
    margin-left: 5px;
    margin-right: 5px;
-}
-
-.card-header.d-flex.justify-content-center.p-1.cardHeaderOverride.headerElementRaw
-{
-
 }
 
 .btn.blockOverride.btn-info.btn-block

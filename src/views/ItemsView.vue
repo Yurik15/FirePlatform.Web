@@ -74,6 +74,20 @@
       </select>
       </div>
       </div>
+
+<div>
+      <div class="d-flex justify-content-center elementRaw">     
+            <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
+     <div class="itemDetailsValue itemDetailsTitleText elementDiv">
+      <svg class="picture">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+  Sorry, your browser does not support inline SVG.  
+</svg> 
+   </div >
+     </div>
+      </div>
+      </div>
+<div>
             </div>
         </div>
                             </div>
@@ -148,8 +162,8 @@ export default {
             })
             }   
 
-            const env = 'https://river-lantern-244519.appspot.com';
-            //const env = 'https://localhost:44358';
+            //const env = 'https://river-lantern-244519.appspot.com';
+            const env = 'https://localhost:44358';
             axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
                 .then(response => {
 
