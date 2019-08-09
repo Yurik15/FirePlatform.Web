@@ -167,7 +167,7 @@ export default {
             })
             }   
 
-            const env = 'https://constant-blend-249308.appspot.com';
+            const env = 'http://constant-blend-249308.appspot.com';
             //const env = 'https://localhost:44358';
             axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value='
                      + value + '&indexOfComboItem=' + indexOfComboItem + '&userId=' + this.userId)
