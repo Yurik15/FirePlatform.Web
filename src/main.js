@@ -12,6 +12,17 @@ import '../node_modules/nprogress/nprogress.css'
 import VueProgressBar from 'vue-progressbar'
 import VueRouter from 'vue-router'
 import routes from './routes';
+import VueCookies from 'vue-cookies'
+
+Vue.use(require('vue-cookies'))
+Vue.use(VueCookies)
+
+// set default config
+VueCookies.config('7d')
+
+// set global cookie
+VueCookies.set('theme','default');
+VueCookies.set('hover-time','1s');
 
 const router = new VueRouter({routes});
 

@@ -8,9 +8,9 @@ export default {
   getAll() {
     return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTemplates');
   },
-  loadTemplatesData(numberTmpl)
+  loadTemplatesData(numberTmpl, userId)
   {
-    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl, process.env.API_ENDPOINT);
+    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl + '&userId=' + userId, process.env.API_ENDPOINT);
   },
   get(id) {
     return Axios.get($,{RESOURCE_NAME}/$,{id});

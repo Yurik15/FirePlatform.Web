@@ -3,7 +3,7 @@ import LoginView from './views/LoginView.vue';
 
 const routes = [
     { path: '/items', component: ItemsView, name: 'items' },
-    { path: '/login', component: LoginView, name: 'lgin' },
+    { path: '/login', component: LoginView, name: 'login' } ,
 ];
 
 export default routes;

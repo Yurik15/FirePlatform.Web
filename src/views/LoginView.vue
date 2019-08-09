@@ -54,6 +54,7 @@ import templatesService from '@/api-services/templates.service';
 import {
     serverBus
 } from '../main.js';
+import VueCookies from 'vue-cookies'
 
 export default {
     
@@ -85,11 +86,11 @@ export default {
                     password: this.password
                 })
                 .then(response => {
-                    if(response.data){
+                    if(response.data !== ""){
+                        VueCookies.set('userId', response.data);
                         this.$router.push(rootName);
                     }
                     else{
-                        alert("login failed");
                         this.wrongloginData = true;
                     }
                 })

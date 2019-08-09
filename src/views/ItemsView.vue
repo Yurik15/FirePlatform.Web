@@ -74,8 +74,9 @@
       </select>
       </div>
       </div>
+                                    </div>
 
-<div>
+<!--<div>
       <div class="d-flex justify-content-center elementRaw">     
             <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
@@ -87,6 +88,7 @@
      </div>
       </div>
       </div>
+      -->
 <div>
             </div>
         </div>
@@ -107,10 +109,12 @@
 <script>
 import axios from 'axios'
 import TheNavbar from '@/components/TheNavbar.vue'
+import LoginView from '@/views/LoginView.vue';
 import {
     serverBus
 } from '../main.js';
 import { stringify } from 'querystring';
+import VueCookies from 'vue-cookies'
 
 export default {
     name: 'ItemsView',
@@ -125,7 +129,8 @@ export default {
         backCalcsHidden: false,
         navbarVisible: true,
         navbarVisibleText: 'show',
-        showAllTextCollection: []
+        showAllTextCollection: [],
+        userId: $cookies.get('userId')
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
@@ -164,7 +169,8 @@ export default {
 
             //const env = 'https://river-lantern-244519.appspot.com';
             const env = 'https://localhost:44358';
-            axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&indexOfComboItem=' + indexOfComboItem)
+            axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value='
+                     + value + '&indexOfComboItem=' + indexOfComboItem + '&userId=' + this.userId)
                 .then(response => {
 
                     var updatedItems = response.data.item2;
@@ -221,20 +227,10 @@ export default {
                 .catch(e => {
                     this.loading = false;
                     this.$Progress.fail();
-
-                    //alert("an error occured, details: " + e.toString());
                 })
         },
         hideNavbar() {
-          //  if (this.navbarVisible === true) {
-              //  this.navbarVisible = false;
-               // this.navbarVisibleText = 'show';
-           // } else {
-                //this.navbarVisible = true;
-                //this.navbarVisibleText = 'hide';
                 this.navbarVisibleText = '';
-            //}
-
         },
         
         updateComboItems: function(comboItems, index){
@@ -255,9 +251,6 @@ export default {
         
     },
     created() {
-                //if session does not work
-                //this.$router.push('/login');
-
                 serverBus.$on('itemsGroup', (mainCollection) => {
                 this.mainCollection = mainCollection;
                 this.mainCollection.forEach(itemGroup => {
@@ -284,9 +277,7 @@ export default {
 
             }),
             serverBus.$on('hideBackCalcs', () => {
-                //alert(this.backCalcsHidden);
                 this.backCalcsHidden = !this.backCalcsHidden;
-               // alert(this.backCalcsHidden);
             })
            
     },

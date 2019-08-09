@@ -39,6 +39,7 @@
 <script>
 import axios from 'axios'
 import templatesService from '@/api-services/templates.service';
+import VueCookies from 'vue-cookies'
 import {
     serverBus
 } from '../main.js';
@@ -48,12 +49,13 @@ export default {
     name: 'TheNavbar',
     data: () => ({
         templates: [],
-        loading: false
+        loading: false,
+        userId: $cookies.get('userId')
     }),
     methods: {
         getTemplate: function (templateId) {
-            this.$Progress.start()
-            templatesService.loadTemplatesData(templateId)
+            this.$Progress.start();
+            templatesService.loadTemplatesData(templateId, $cookies.get('userId'))
                 .then(response => {
                     this.$Progress.finish();
                     serverBus.$emit('itemsGroup', response.data);
