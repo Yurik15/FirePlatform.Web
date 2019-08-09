@@ -17,8 +17,6 @@ import VueCookies from 'vue-cookies'
 Vue.use(require('vue-cookies'))
 Vue.use(VueCookies)
 
-Vue.http.headers.common['Access-Control-Allow-Origin'] = 'https://constant-blend-249308.appspot.com'
-
 // set default config
 VueCookies.config('7d')
 

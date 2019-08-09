@@ -175,6 +175,11 @@ export default {
                     ItemId: itemId,
                     Value: value,
                     UserId: this.userId
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                 }
                 })
                 .then(response => {
 
