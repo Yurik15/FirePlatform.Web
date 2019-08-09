@@ -167,10 +167,15 @@ export default {
             })
             }   
 
-            const env = 'http://constant-blend-249308.appspot.com';
+            const env = 'https://constant-blend-249308.appspot.com';
             //const env = 'https://localhost:44358';
-            axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value='
-                     + value + '&indexOfComboItem=' + indexOfComboItem + '&userId=' + this.userId)
+            
+                axios.post(env + '/api/Calculations/Set', {
+                    GroupId: groupId,
+                    ItemId: itemId,
+                    Value: value,
+                    UserId: this.userId
+                })
                 .then(response => {
 
                     var updatedItems = response.data.item2;
