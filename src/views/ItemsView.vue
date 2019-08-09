@@ -178,7 +178,10 @@ export default {
                 },
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': 'https://constant-blend-249308.appspot.com',
+                        'Access-Control-Allow-Methods': 'GET, POST'
                  }
                 })
                 .then(response => {
