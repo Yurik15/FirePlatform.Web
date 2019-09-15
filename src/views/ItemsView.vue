@@ -24,13 +24,49 @@
                                  v-bind:value="itemDetails.Value" :key="index">
                                     <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center elementRaw">
+<div>
+    <div v-if="itemDetails.picture !== null"> 
+
+<!-- Modal -->
+
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{itemDetails.picture.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+           
+      <div v-html="itemDetails.picture.data"></div>
+      </div>
     
-                                            <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>                                   
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </div></div>
+  
+    <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>       
+    <div class="input-group itemDetailsValue">                            
     <p class = "itemDetailsValue textFormula form-control disabledItem" 
     v-bind:class="{ textFormulaOneLineText:  !showAllTextCollection.includes(itemDetails.numID)}" type="text"
       @click="calculateShowAllTextForItems(itemDetails.numID)"
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type">{{itemDetails.value}}</p>
+    <div v-if="itemDetails.picture !== null"> 
+          <div class="input-group-append">
+    <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+         <img style="height: 25px;" src="../assets/image.png">
+</button>
+  </div>
+   </div>
+  </div>
   <p>
+
 </p>
 </div>
   <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center elementRaw">    
@@ -39,13 +75,11 @@
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
- <div v-else-if="itemDetails.type === 'BackCalcs'" class="d-flex justify-content-center elementRaw">    
-  <div v-if="backCalcsHidden === false">
-    <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <input class = "itemDetailsValue form-control disabledItem" :disabled="loading" type="text" 
+ <div v-else-if="itemDetails.type === 'BackCalc' && backCalcsHidden === false" class="d-flex justify-content-center elementRaw">    
+<label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
+    <p class = "itemDetailsValue textFormula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
-    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" v-model="itemDetails.value" />
-</div>
+    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
 <div v-else-if="itemDetails.type === 'Num'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
@@ -71,12 +105,14 @@
             :value="selectedItem.displayName" :key="index">
             {{selectedItem.displayName.split(SEPARATOR)[0]}}
         </option>
+  
       </select>
+
       </div>
       </div>
                                     </div>
-
-<!--<div>
+<!--<div v-else-if="true" class="d-flex justify-content-center elementRaw">
+<div>
       <div class="d-flex justify-content-center elementRaw">     
             <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
@@ -84,11 +120,11 @@
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
   Sorry, your browser does not support inline SVG.  
 </svg> 
-   </div >
+</div>
      </div>
       </div>
-      </div>
-      -->
+      </div>-->
+      
 <div>
             </div>
         </div>
