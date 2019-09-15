@@ -79,7 +79,7 @@ export default {
                this.missedPassword = true;
            }
            if(this.login !== '' && this.password !== ''){
-           //const env = 'https://river-lantern-244519.appspot.com';
+            //const env = 'http://shine15-001-site1.btempurl.com';
             const env = 'https://localhost:44358';
             axios.post(env + '/api/Account/LoginTest', {
                     login: this.login,
@@ -87,7 +87,9 @@ export default {
                 })
                 .then(response => {
                     if(response.data !== ""){
-                        VueCookies.set('userId', response.data);
+                        alert(response.data.userId);
+                        VueCookies.set('userId', response.data.userId);
+                        VueCookies.set('token', response.data.token);
                         this.$router.push(rootName);
                     }
                     else{

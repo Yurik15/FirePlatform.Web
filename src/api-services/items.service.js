@@ -3,6 +3,10 @@ import Axios from 'axios';
 const RESOURCE_NAME = '/api';
  
 export default {
+  data ()
+  {
+    
+  },
   getAll() {
     return Axios.get(RESOURCE_NAME);
   },

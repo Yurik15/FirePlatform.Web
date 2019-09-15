@@ -55,6 +55,7 @@ export default {
     methods: {
         getTemplate: function (templateId) {
             this.$Progress.start();
+            alert($cookies.get('userId'));
             templatesService.loadTemplatesData(templateId, $cookies.get('userId'))
                 .then(response => {
                     this.$Progress.finish();

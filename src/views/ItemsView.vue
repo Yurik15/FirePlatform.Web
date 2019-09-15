@@ -64,7 +64,7 @@
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible" class="d-flex justify-content-center elementRaw">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
-      <select :placeholder="placer" :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
+      <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
@@ -118,7 +118,6 @@ import VueCookies from 'vue-cookies'
 
 export default {
     name: 'ItemsView',
-    placer: 'asdas',
     components: {
         TheNavbar
     },
@@ -130,7 +129,8 @@ export default {
         navbarVisible: true,
         navbarVisibleText: 'show',
         showAllTextCollection: [],
-        userId: $cookies.get('userId')
+        userId: $cookies.get('userId'),
+        token: $cookies.get('token')
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
@@ -167,8 +167,8 @@ export default {
             })
             }   
 
-            const env = 'https://constant-blend-249308.appspot.com';
-            //const env = 'https://localhost:44358';
+            //const env = 'http://shine15-001-site1.btempurl.com';
+            const env = 'https://localhost:44358';
             
                 axios.post(env + '/api/Calculations/Set', {
                     GroupId: groupId,
@@ -180,8 +180,9 @@ export default {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': 'https://constant-blend-249308.appspot.com',
-                        'Access-Control-Allow-Methods': 'GET, POST'
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'GET, POST',
+                        'Authorization': 'Bearer ' + this.token
                  }
                 })
                 .then(response => {
