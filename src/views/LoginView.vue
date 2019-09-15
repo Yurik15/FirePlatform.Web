@@ -79,8 +79,8 @@ export default {
                this.missedPassword = true;
            }
            if(this.login !== '' && this.password !== ''){
-            //const env = 'https://constant-blend-249308.appspot.com';
-            const env = 'https://localhost:44358';
+            const env = 'https://constant-blend-249308.appspot.com';
+            //const env = 'https://localhost:44358';
             axios.post(env + '/api/Account/Login', {
                     login: this.login,
                     password: this.password
