@@ -167,7 +167,7 @@ export default {
             })
             }   
 
-            //const env = 'http://shine15-001-site1.btempurl.com';
+            //const env = 'https://constant-blend-249308.appspot.com';
             const env = 'https://localhost:44358';
             
                 axios.post(env + '/api/Calculations/Set', {
