@@ -1,16 +1,16 @@
 import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
-const env = 'https://constant-blend-249308.appspot.com';
-//const env = 'https://localhost:44358';
- 
+const env = 'http://shine15-001-site1.btempurl.com';
+//const env = 'http://localhost:59548';
+  
 export default {
   getAll() {
     return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTemplates',
       {
       headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
@@ -22,8 +22,8 @@ export default {
     return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl + '&userId=' + userId,
     {
       headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')

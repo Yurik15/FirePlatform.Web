@@ -30,13 +30,7 @@
                                     <div class="alert alert-danger loginFailedMessage" role="alert">Login failed! Please try again...</div>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="custom-control custom-checkbox">
-                                      <input type="checkbox">
-                                      <span class="custom-control-indicator"></span>
-                                      <span class="custom-control-description small text-dark" style="color: #4a76a8 !important">Remember me</span>
-                                    </label>
-                                </div>
+                              
                             </form>
                        <button class="btn btn-success float-right" v-on:click="tryLogin('/items')" style="backgroundColor: #4a76a8" id="btnLogin">Login</button>
                         </div>
@@ -79,7 +73,7 @@ export default {
                this.missedPassword = true;
            }
            if(this.login !== '' && this.password !== ''){
-            const env = 'https://constant-blend-249308.appspot.com';
+            const env = 'http://shine15-001-site1.btempurl.com';
             //const env = 'https://localhost:44358';
             axios.post(env + '/api/Account/Login', {
                     login: this.login,

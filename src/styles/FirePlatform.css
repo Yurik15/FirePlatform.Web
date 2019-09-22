@@ -21,9 +21,9 @@
    font-weight: 500;
    font-size: 13px;
    width: 45%; 
-   margin-bottom: 2px;
+   margin-bottom: 4px;
    font-weight: 400;
-   margin-top: 2px;
+   margin-top: 1px;
 }
 
 .itemDetailsValue.disabledItem
@@ -59,8 +59,18 @@ label.itemDetailsTitle
 
 .itemDetailsValueCheckBox
 {
-   height: 95%;
-   width: 20px;
+   margin-left: 1.5%;
+    margin-top: 6px;
+    margin-bottom: 0px;
+}
+input[type=checkbox]
+{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  padding: 10px;
 }
 
 .cardHeaderOverride
@@ -129,6 +139,11 @@ label.itemDetailsTitle
    margin-bottom: 3px;
    height: 95% !important;
 }
+.collapsing {
+   -webkit-transition: height .0s ease;
+        -o-transition: height .0s ease;
+           transition: height .0s ease;
+ }
 
 .card-body.divCard
 {
@@ -141,6 +156,7 @@ label.itemDetailsTitle
    border-bottom: 0.1px solid lightsteelblue !important;
    margin-left: 5px;
    margin-right: 5px;
+   align-items: center;
 }
 
 .btn.blockOverride.btn-info.btn-block
@@ -155,9 +171,9 @@ label.itemDetailsTitle
    height: auto;
    font-weight: 500;
    font-size: 13px;
-   margin-bottom: 2px;
+   margin-bottom: 4px;
    font-weight: 400;
-   margin-top: 2px;
+   margin-top: 1px;
    margin-left: 2px;
 }
 .itemDetailsValue.textFormulaOneLineText.form-control
@@ -221,6 +237,11 @@ body {
    font-weight: 600;  
    text-align: left;
    padding-left: 2%;
+}
+.menuButton{
+   margin-top: 2%;
+   width: 80% !important;
+   height: 50% !important;
 }
 .col-sm-10.mainSection{
    padding-right: 4%;

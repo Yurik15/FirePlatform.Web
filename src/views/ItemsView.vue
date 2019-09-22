@@ -14,7 +14,7 @@
                     <body>
                         <div v-if="item.isVisible === true">
                             <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride headerElementRaw" header-tag="header" role="tab">
-                                <b-btn  v-b-toggle="'collapse' + index" class="blockOverride" :aria-expanded="item.expanded" block href="#" data-target="#'collapse'+ index" data-toggle="'collapse' + index" variant="info" aria-controls="'collapse' + index">{{item.title}}</b-btn>
+                                <b-btn  v-b-toggle="'collapse' + index" class="blockOverride" :aria-expanded="true" block href="#" data-target="#'collapse'+ index" data-toggle="'collapse' + index" variant="info" aria-controls="'collapse' + index">{{item.title}}</b-btn>
                             </b-card-header>
                         </div>
                         <b-collapse :id="'collapse' + index" role="tabpanel" v-model="item.expanded">
@@ -26,9 +26,6 @@
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center elementRaw">
 <div>
     <div v-if="itemDetails.picture !== null"> 
-
-<!-- Modal -->
-
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -50,20 +47,23 @@
   </div>
 </div>
   </div></div>
-  
-    <label class = "itemDetailsTitle" v-text = "itemDetails.title"/>       
+  <div class = "itemDetailsTitle">
+      <div v-if="itemDetails.picture"> 
+    <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+         <img style="height: 25px;" src="../assets/description.png">
+</button>
+ <label v-text = "itemDetails.title"/> 
+</div>
+<div v-else-if="!itemDetails.picture">
+    <label v-text = "itemDetails.title"/>   
+    </div>    
+    </div>
     <div class="input-group itemDetailsValue">                            
     <p class = "itemDetailsValue textFormula form-control disabledItem" 
     v-bind:class="{ textFormulaOneLineText:  !showAllTextCollection.includes(itemDetails.numID)}" type="text"
       @click="calculateShowAllTextForItems(itemDetails.numID)"
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type">{{itemDetails.value}}</p>
-    <div v-if="itemDetails.picture !== null"> 
-          <div class="input-group-append">
-    <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
-         <img style="height: 25px;" src="../assets/image.png">
-</button>
-  </div>
-   </div>
+    
   </div>
   <p>
 
@@ -110,21 +110,7 @@
 
       </div>
       </div>
-                                    </div>
-<!--<div v-else-if="true" class="d-flex justify-content-center elementRaw">
-<div>
-      <div class="d-flex justify-content-center elementRaw">     
-            <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-     <div class="itemDetailsValue itemDetailsTitleText elementDiv">
-      <svg class="picture">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-  Sorry, your browser does not support inline SVG.  
-</svg> 
-</div>
-     </div>
-      </div>
-      </div>-->
-      
+                                    </div>    
 <div>
             </div>
         </div>
@@ -145,11 +131,9 @@
 <script>
 import axios from 'axios'
 import TheNavbar from '@/components/TheNavbar.vue'
-import LoginView from '@/views/LoginView.vue';
 import {
     serverBus
 } from '../main.js';
-import { stringify } from 'querystring';
 import VueCookies from 'vue-cookies'
 
 export default {
@@ -187,7 +171,6 @@ export default {
                 });   
 
             //search value of combo
-
             this.mainCollection.forEach(itemGroup => {
 
                                 itemGroup.items.forEach(item => {
@@ -203,19 +186,13 @@ export default {
             })
             }   
 
-            const env = 'https://constant-blend-249308.appspot.com';
+            const env = 'http://shine15-001-site1.btempurl.com';
             //const env = 'https://localhost:44358';
             
-                axios.post(env + '/api/Calculations/Set', {
-                    GroupId: groupId,
-                    ItemId: itemId,
-                    Value: value,
-                    UserId: this.userId
-                },
+                axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value=' + value + '&userId=' + this.userId,
                 {
                     headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json;',
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'GET, POST',
                         'Authorization': 'Bearer ' + this.token
@@ -276,6 +253,7 @@ export default {
                 })
                 .catch(e => {
                     this.loading = false;
+                    console.log("exception is occured: " + e);
                     this.$Progress.fail();
                 })
         },
@@ -284,10 +262,12 @@ export default {
         },
         
         updateComboItems: function(comboItems, index){
-            var newcomboItems = Object.assign({}, this.item.comboItems, comboItems);
-            this.item.comboItems.push(newcomboItems);
-            this.item.value = this.item.comboItems[index].displayName;
-          
+            if(this.item){
+                alert('this');
+                var newcomboItems = Object.assign({}, this.item.comboItems, comboItems);
+                this.item.comboItems.push(newcomboItems);
+                this.item.value = this.item.comboItems[index].displayName;
+            }
         },
         
         calculateShowAllTextForItems(numID) {
@@ -297,6 +277,9 @@ export default {
             else{
                this.showAllTextCollection.push(numID);
             }   
+        },
+        changeBackCalcsButton(hidden){
+
         }
         
     },
@@ -314,7 +297,9 @@ export default {
                                                 comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
                                             }
                                         })
-                                    this.updateComboItems(item.comboItems, 1);
+                                        if(item){
+                                            this.updateComboItems(item.comboItems, 1);
+                                        }
                                 }
                             })
                         });             
@@ -326,14 +311,17 @@ export default {
                         });
 
             }),
+             serverBus.$on('showAllElements', () => {
+                this.mainCollection
+                    .forEach(groupItem => {
+                                groupItem.expanded = true;
+                        });
+
+            }),
             serverBus.$on('hideBackCalcs', () => {
                 this.backCalcsHidden = !this.backCalcsHidden;
             })
            
-    },
-    mounted(){
-
-              this.updateComboItems(item.comboItems, 1);
     }
 }
 </script>

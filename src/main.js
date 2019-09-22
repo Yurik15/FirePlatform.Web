@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App.vue'
-import vueJquery from '../node_modules/vue-jquery'
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css';
@@ -13,11 +12,6 @@ import VueProgressBar from 'vue-progressbar';
 import VueRouter from 'vue-router'
 import routes from './routes';
 import VueCookies from 'vue-cookies';
-//import { faUserSecret } from '../node_modules/@fortawesome/free-solid-svg-icons';
-//import { FontAwesomeIcon } from '../node_modules/@fortawesome/vue-fontawesome';
-
- 
-//Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(require('vue-cookies'))
 Vue.use(VueCookies)
@@ -49,8 +43,6 @@ Vue.use(VueProgressBar, {
 Vue.use(VueRouter)
 Vue.use(BootstrapVue);
 Vue.use(Collapse);
-Vue.use(vueJquery);
-
 
 Axios.defaults.baseURL = process.env.API_ENDPOINT;
 export const serverBus = new Vue();

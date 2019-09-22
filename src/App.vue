@@ -1,7 +1,6 @@
 
 <template>
   <div id="app">
-    <font-awesome-icon icon="user-secret" />
     <nav>
         <!--<router-link to='/login'>Login</router-link>-->
     </nav>
