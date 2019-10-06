@@ -83,7 +83,7 @@
 </div>
 <div v-else-if="itemDetails.type === 'Num'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <input class = "itemDetailsValue form-control" type="number" 
+  <input class = "itemDetailsValue numeric form-control" type="number" 
   @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
   :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
 </div>
@@ -145,12 +145,12 @@ export default {
         SEPARATOR: 'sepComboItem',
         mainCollection: [],
         loading: false,
-        backCalcsHidden: false,
+        backCalcsHidden: true,
         navbarVisible: true,
         navbarVisibleText: 'show',
         showAllTextCollection: [],
         userId: $cookies.get('userId'),
-        token: $cookies.get('token')
+        token: $cookies.get('token'),
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {

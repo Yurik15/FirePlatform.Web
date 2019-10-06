@@ -17,13 +17,17 @@
 
 .itemDetailsValue
 {
-   height: auto;
    font-weight: 500;
    font-size: 13px;
    width: 45%; 
    margin-bottom: 4px;
    font-weight: 400;
    margin-top: 1px;
+}
+
+.itemDetailsValue.numeric.form-control{
+   height: 25px;
+   font-weight: 500;
 }
 
 .itemDetailsValue.disabledItem
@@ -39,8 +43,8 @@
 
 .itemDetailsTitleText{
    height: 95%;
-   font-size: 15px;
-   font-weight: 400;
+   font-size: 13px;
+   font-weight: 500;
    padding-top: 1px !important;
    padding-bottom: 1px !important;
 }
@@ -66,11 +70,11 @@ label.itemDetailsTitle
 input[type=checkbox]
 {
   /* Double-sized Checkboxes */
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
-  padding: 10px;
+  -ms-transform: scale(1.75); /* IE */
+  -moz-transform: scale(1.75); /* FF */
+  -webkit-transform: scale(1.75); /* Safari and Chrome */
+  -o-transform: scale(1.75); /* Opera */
+  padding: 5px;
 }
 
 .cardHeaderOverride
@@ -172,15 +176,17 @@ input[type=checkbox]
    font-weight: 500;
    font-size: 13px;
    margin-bottom: 4px;
-   font-weight: 400;
    margin-top: 1px;
    margin-left: 2px;
+   padding-top: 2px;
 }
 .itemDetailsValue.textFormulaOneLineText.form-control
 {
+   height: 25px;
    text-overflow: ellipsis;
    overflow: hidden;
    white-space: nowrap;
+   padding-top: 2px;
 }
 
 .navbar.navbar-expand-lg
@@ -226,6 +232,15 @@ body {
    padding-right: 0.1% !important;
 }
 
+.menuMobile
+{
+   display: none;   
+}
+.menuDefault
+{
+   display: block;   
+}
+
 @media only screen and (max-width: 768px) {
    /* For mobile phones: */
    [class*="col-"] {
@@ -246,6 +261,21 @@ body {
 .col-sm-10.mainSection{
    padding-right: 4%;
    padding-left: 4%;
+}
+
+.menuDefault
+{
+   display: none;   
+}
+.menuMobile
+{
+    display: block;
+}
+.itemDetailsValueCheckBox
+{
+   margin-left: 4px;
+    margin-top: 6px;
+    margin-bottom: 0px;
 }
 
  }
