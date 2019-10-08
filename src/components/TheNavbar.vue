@@ -41,7 +41,7 @@
         </div>
         
         <span class="menuMobile" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
-           <button v-on:click="collapseAlElements()" type="button" class="btn" data-toggle="modal" data-target="#exampleModalCenter">
+           <button v-on:click="collapseAlElements()" type="button" class="btn">
          <img style="height: 25px; " src="../assets/collapse.png">
 </button>
     </nav>

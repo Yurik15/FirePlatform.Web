@@ -71,7 +71,7 @@
 </div>
   <div v-else-if="itemDetails.type === 'Formula'" class="d-flex justify-content-center elementRaw">    
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-    <p class = "itemDetailsValue textFormula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
+    <p class = "itemDetailsValue textFormula formula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
@@ -89,7 +89,7 @@
 </div>
 <div v-else-if="itemDetails.type === 'Check'" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
-  <div class="itemDetailsValue ">
+  <div class="itemDetailsValue itemDetailsValueCheckBoxDiv">
   <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>

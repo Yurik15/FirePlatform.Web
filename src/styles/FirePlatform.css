@@ -23,11 +23,15 @@
    margin-bottom: 4px;
    font-weight: 400;
    margin-top: 1px;
+   border: none;
 }
 
 .itemDetailsValue.numeric.form-control{
    height: 25px;
    font-weight: 500;
+   background-color: #e9ebee;
+   color: #17a2b8;
+   margin-left: 14px;
 }
 
 .itemDetailsValue.disabledItem
@@ -48,6 +52,7 @@
    padding-top: 1px !important;
    padding-bottom: 1px !important;
 }
+
 .itemDetailsTitle
 {
    font-size: 14px;
@@ -63,7 +68,7 @@ label.itemDetailsTitle
 
 .itemDetailsValueCheckBox
 {
-   margin-left: 1.5%;
+   margin-left: 18px;
     margin-top: 6px;
     margin-bottom: 0px;
 }
@@ -142,6 +147,8 @@ input[type=checkbox]
    border: none; 
    margin-bottom: 3px;
    height: 95% !important;
+   background-color: #e9ebee;
+   margin-left: 2px;
 }
 .collapsing {
    -webkit-transition: height .0s ease;
@@ -169,6 +176,8 @@ input[type=checkbox]
    font-weight: 600;  
    text-align: left;
    padding-left: 20%;
+   border-radius: 0px 0px 0px 0px;
+   
 }
 .itemDetailsValue.textFormula.form-control
 {
@@ -180,6 +189,12 @@ input[type=checkbox]
    margin-left: 2px;
    padding-top: 2px;
 }
+
+.itemDetailsValue.textFormula.formula.form-control
+{
+   margin-left: 14px;
+}
+
 .itemDetailsValue.textFormulaOneLineText.form-control
 {
    height: 25px;
@@ -200,6 +215,11 @@ input[type=checkbox]
 
 .cardList{
    margin-top: 60px !important;
+}
+
+
+.btn:focus, .btn:active:focus, .btn.active:focus {
+   box-shadow: none !important;
 }
 
 body {
@@ -273,10 +293,18 @@ body {
 }
 .itemDetailsValueCheckBox
 {
-   margin-left: 4px;
+    background-color: #e9ebee;
+    margin-left: 18px;
     margin-top: 6px;
     margin-bottom: 0px;
 }
 
- }
+.itemDetailsValue.itemDetailsValueCheckBoxDiv
+{
+   margin-top: 3px;
+}
+
+}
+
+ 
 
