@@ -213,6 +213,13 @@ input[type=checkbox]
    color: #4a76a8 !important;
 }
 
+.wrap{display:flex;}
+.box{
+height: 100vh;
+    width: 50% !important;
+    overflow: scroll;
+}
+
 .cardList{
    margin-top: 60px !important;
 }

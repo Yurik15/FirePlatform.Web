@@ -1,8 +1,8 @@
 import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
-const env = 'http://shine15-001-site1.btempurl.com';
-//const env = 'http://localhost:59548';
+//const env = 'http://shine15-001-site1.btempurl.com';
+const env = 'https://localhost:44358/';
   
 export default {
   getAll() {
@@ -17,9 +17,10 @@ export default {
       }
       });
   },
-  loadTemplatesData(numberTmpl, userId)
+  loadTemplatesData(numberTmpl, userId, isRightTemplate)
   {
-    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl + '&userId=' + userId,
+    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl 
+    + '&userId=' + userId + '&isRightTemplate=' + isRightTemplate,
     {
       headers: {
         'Accept': 'application/json',
