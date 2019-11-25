@@ -17,19 +17,25 @@ export default {
       }
       });
   },
-  loadTemplatesData(numberTmpl, userId, isRightTemplate)
+  loadTemplatesData(template, isRightTemplate)
   {
-    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTmp?numberTmpl=' + numberTmpl 
-    + '&userId=' + userId + '&isRightTemplate=' + isRightTemplate,
-    {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
+    const auth = {
+      'Content-Type': 'application/json;',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
-      }
-      });
+}
+
+    return  axios.post(env + '/api/Calculations/LoadTmp', {
+        userId: $cookies.get('userId'),
+        lng: template.lng,
+        shortName: template.shortName,
+        longName:template.longName,
+        stage :template.stage,
+        topic : template.topic,
+        isRightTemplate: isRightTemplate
+    }, auth)
+    
   },
   get(id) {
     return Axios.get($,{RESOURCE_NAME}/$,{id});

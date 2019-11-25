@@ -301,6 +301,39 @@ export default {
         changeBackCalcsButton(hidden){
 
         },
+        preselect(isRightTemplate)
+        {
+            alert("ok");
+
+            const auth = {
+            'Content-Type': 'application/json;',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST',
+          'Authorization': 'Bearer ' + $cookies.get('token')
+}           
+
+             const env = 'https://localhost:44358';
+            axios.post(env + '/api/Calculations/Preselection', {
+                    isRightTemplate: isRightTemplate,
+                    preselectionEnabled: true,
+                    userId: this.userId
+                }, auth)
+                .then(response => {
+                    if(isRightTemplate){
+                       
+                        this.rightMainCollection = mainCollection;
+                        this.templateOnLoad(mainCollection); 
+                    }
+                    else{
+                        this.leftMainCollection = mainCollection;
+                        this.templateOnLoad(mainCollection); 
+                    }
+                })
+                .catch(e => {
+                    alert("Error is occured, please try again. Error: " + e.toString());
+                });
+                
+        }, 
         fetchPicture(numberId, groupId){
             //const env = 'http://shine15-001-site1.btempurl.com';
             const env = 'https://localhost:44358';
@@ -374,9 +407,9 @@ export default {
                     this.templateOnLoad(mainCollection);      
             }),
             serverBus.$on('collapseAlElements', () => {
-                            if(this.isRightTemplate){
+            if(this.isRightTemplate){
                 this.mainCollection = this.rightMainCollection;
-            }else{
+            }else {
                 this.mainCollection = this.leftMainCollection;
             }
                 this.mainCollection
@@ -396,10 +429,10 @@ export default {
                 this.backCalcsHidden = !this.backCalcsHidden;
             }),
             serverBus.$on('preselectLeft', () => {
-                this.backCalcsHidden = !this.backCalcsHidden;
+                this.preselect(false);
             }),
             serverBus.$on('preselectRight', () => {
-                this.backCalcsHidden = !this.backCalcsHidden;
+                this.preselect(true);
             })
                        
     },

@@ -46,7 +46,7 @@
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id, template.name, false)">{{template.name}}</button>
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id, template.name, false)">{{template}}</button>
                         </li>
                     </ul>
                 </li>
@@ -98,8 +98,8 @@
           Templates
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id, template.name, false)">{{template.name}}</button>
+                        <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, false)">{{template.shortName}}</button>
                         </li>
                     </ul>
                 </li>
@@ -111,8 +111,8 @@
                         <div class="menuButton">
                     <a v-on:click="showAllElements()" class="menuButton dropdown-item" href="#">Expand All</a>
                     <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">{{hideBackCalcsText}}</a>
-                    <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">Preselect left</a>
-                    <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">Preselect right</a>
+                    <a v-on:click="preselectLeft()" class="menuButton dropdown-item" href="#">Preselect left</a>
+                    <a v-on:click="preselectRight()" class="menuButton dropdown-item" href="#">Preselect right</a>
                     </div>
                 </div>
                 </li>
@@ -191,12 +191,12 @@ export default {
         templateDivsPercent: 49
     }),
     methods: {
-   getTemplate: function (templateId, templateName, isRightTemplate) {
+   getTemplate: function (template, isRightTemplate) {
             this.$Progress.start();
             if(isRightTemplate){
-                this.selectedTemplateNameRight = templateName;
+                this.selectedTemplateNameRight = template.shortName;
             }else{
-                this.selectedTemplateName = templateName;
+                this.selectedTemplateName = template.shortName;
             }
            // var currentTemplate = JSON.parse(localStorage.getItem('template' + templateId));
            // if(currentTemplate){
@@ -206,8 +206,8 @@ export default {
           //  }
            // else{   
 
-               ///alert(isRightTemplate);
-            templatesService.loadTemplatesData(templateId, $cookies.get('userId'), isRightTemplate)
+            
+            templatesService.loadTemplatesData(template, isRightTemplate)
                 .then(response => {
                     this.$Progress.finish();
                    // alert("ok");
@@ -304,6 +304,7 @@ export default {
             .then(response => { 
                 this.$Progress.finish();
                 this.loading = true;
+           
 
                 this.templates = response.data;
             })
