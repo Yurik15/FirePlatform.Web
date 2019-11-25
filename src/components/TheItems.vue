@@ -88,7 +88,9 @@
   :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
 </div>
 <div v-else-if="itemDetails.type === 'Check' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
-  <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
+  <label class = "itemDetailsTitle" v-text = "itemDetails.title"
+    v-bind:class="{ OneLineTitle:  !showAllTextCollection.includes('title' + itemDetails.numID)}"
+    @click="calculateShowAllTextForItems('title' + itemDetails.numID)"/>
   <div class="itemDetailsValue itemDetailsValueCheckBoxDiv">
   <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
@@ -100,6 +102,7 @@
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
       <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
+        <option :value="undefined" disabled hidden>-- Please select --</option>
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
             :value="selectedItem.displayName" :key="index">
@@ -360,11 +363,13 @@ export default {
     created() {
             serverBus.$on('itemsGroupLeft', (mainCollection) => {
                 //this.isRightTemplate = false;
+               // alert("ok");
                 this.leftMainCollection = mainCollection;
                     this.templateOnLoad(mainCollection);
             }),
             serverBus.$on('itemsGroupRight', (mainCollection) => {
                 //this.isRightTemplate = true;
+                   // alert("ok");  
                 this.rightMainCollection = mainCollection;
                     this.templateOnLoad(mainCollection);      
             }),
@@ -388,6 +393,12 @@ export default {
 
             }),
             serverBus.$on('hideBackCalcs', () => {
+                this.backCalcsHidden = !this.backCalcsHidden;
+            }),
+            serverBus.$on('preselectLeft', () => {
+                this.backCalcsHidden = !this.backCalcsHidden;
+            }),
+            serverBus.$on('preselectRight', () => {
                 this.backCalcsHidden = !this.backCalcsHidden;
             })
                        

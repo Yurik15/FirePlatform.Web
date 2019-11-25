@@ -10,7 +10,7 @@ export default {
       {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
@@ -24,7 +24,7 @@ export default {
     {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')

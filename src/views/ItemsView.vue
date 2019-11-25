@@ -1,22 +1,24 @@
 <template>
-<div class="page">
-      <div class="row">
-    <div class="col">
+<splitpanes class="default-theme" @resize="paneSize = $event[0].size" style="height: 100%; min-height: 100vh;">
+  <pane :size="paneSize">
+    <span>
           <TheNavbar :isRightTemplate='false'></TheNavbar>
           <TheItems :isRightTemplate='false'></TheItems>
-    </div>
-    <div style="background-color: #4a76a8; height: 1000px" >
-   <hr width="2"  >
-   </div>
-    <div class="col">
-          <TheNavbar :isRightTemplate='true'></TheNavbar>
+    </span>
+  </pane>
+  <pane :size="100 - paneSize">
+    <span>
+        <TheNavbar :isRightTemplate='true'></TheNavbar>
           <TheItems :isRightTemplate='true'></TheItems>
-    </div>
-  </div>
-</div>
+    </span>
+  </pane>
+</splitpanes>
+
 </template>
 
 <script>
+import { Splitpanes, Pane } from 'splitpanes'
+import 'splitpanes/dist/splitpanes.css'
 import axios from 'axios'
 import TheItems from '@/components/TheItems.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
@@ -29,7 +31,9 @@ export default {
     name: 'ItemsView',
     components: {
         TheItems,
-        TheNavbar
+        TheNavbar,
+        Splitpanes,
+        Pane
     },
     data: () => ({
         SEPARATOR: 'sepComboItem',
@@ -41,9 +45,10 @@ export default {
         showAllTextCollection: [],
         userId: $cookies.get('userId'),
         token: $cookies.get('token'),
+        leftDivWidthPercent: 49,
+        rightDivWidthPercent: 49,
     }),
     methods: {
-    
     }
 }
 </script>

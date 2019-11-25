@@ -59,8 +59,16 @@
    height: 95%;
    color: #4a76a8 !important;
    width: 55%; 
-   margin-left: 5px;
+   margin-left: 5px;  
 }
+
+.itemDetailsTitle.OneLineTitle
+{
+   white-space: nowrap;
+   text-overflow: ellipsis;
+    overflow: hidden; 
+}
+
 label.itemDetailsTitle
 {
    margin-bottom: 5px;
