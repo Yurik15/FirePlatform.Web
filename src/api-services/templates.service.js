@@ -5,8 +5,12 @@ const RESOURCE_NAME = '/api';
 const env = 'https://localhost:44358/';
   
 export default {
-  getAll() {
-    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTemplates',
+  getAll(language) {
+    
+    if(!language){
+      language = 'pol';
+    }
+    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTemplates?language=' + language + '&userId=' + $cookies.get('userId'),
       {
       headers: {
         'Accept': 'application/json',
@@ -17,7 +21,7 @@ export default {
       }
       });
   },
-  loadTemplatesData(template, isRightTemplate)
+  loadTemplatesData(template, isRightTemplate, languageValue)
   {
     const auth = {
       'Content-Type': 'application/json;',
@@ -28,7 +32,7 @@ export default {
 
     return  axios.post(env + '/api/Calculations/LoadTmp', {
         userId: $cookies.get('userId'),
-        lng: template.lng,
+        lng: languageValue,
         shortName: template.shortName,
         longName:template.longName,
         stage :template.stage,

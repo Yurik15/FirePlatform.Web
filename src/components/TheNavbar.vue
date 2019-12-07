@@ -46,7 +46,7 @@
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id, template.name, false)">{{template}}</button>
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, false)">{{template}}</button>
                         </li>
                     </ul>
                 </li>
@@ -97,9 +97,55 @@
                     <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Templates
         </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu "  style="min-width: 700px" aria-labelledby="navbarDropdownMenuLink">
+                          <div class="row" style="margin: 0px; align-items: center;">
+                              <div class="col-sm-2" style="padding: 2px !important;">
+                                  Script language
+                                  </div>
+                                  <div class="col-sm-2" style="margin-bottom: 3px !important; padding: 5px !important">
+                             <form v-on:submit.prevent="send">                                                                                             
+                <b-form-select @change="onChangeScriptLanguage(languageValue)" v-model="languageValue" class="mb-3" >
+  <option v-for="option in languageOptions" v-bind:key="option.value" v-bind:value="option.value">
+    {{ option.text }}
+  </option>
+<span>Selected: {{ selected }}</span>
+                </b-form-select>
+            </form>
+         </div>
+  </div>
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, false)">{{template.shortName}}</button>
+                            
+                            <div>
+                                <div class="row">
+          <div class="col-sm-4 multi-column-dropdown" style="min-width: 200px">
+              <button class="dropdown-item " type="button" v-on:click="getTemplate(template, false)">{{template.shortName}}</button>
+                   </div> 
+                   <div class="col-sm-2" style="padding: 2px !important;">
+             <div class="dropdown">
+      <form v-on:submit.prevent="send">
+    <b-form-select class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
+      <option :value="undefined" disabled hidden>Latest</option>
+        
+    </b-form-select>
+  </form>
+
+</div>
+                   </div> 
+                   <div class="col-sm-4" style="padding: 2px !important;">
+                           <form v-on:submit.prevent="send">
+                 <b-form-select v-model="savedTemplate" class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
+      <option :value="undefined" disabled hidden>-- Select saved --</option>
+      <option v-for="savedTemplate in template.savedTemplates" v-bind:key="savedTemplate.savedName" v-bind:value="savedTemplate.savedName">
+          {{savedTemplate.savedName}}
+            </option>
+    </b-form-select>
+      </form>
+                   </div> 
+                    <div class="col-sm-1">
+                        <button v-on:click="getTemplate(template, false)" class="btn btn-secondary">Load</button>
+                        </div>
+                                   </div>
+                                     </div>
                         </li>
                     </ul>
                 </li>
@@ -113,6 +159,20 @@
                     <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">{{hideBackCalcsText}}</a>
                     <a v-on:click="preselectLeft()" class="menuButton dropdown-item" href="#">Preselect left</a>
                     <a v-on:click="preselectRight()" class="menuButton dropdown-item" href="#">Preselect right</a>
+                     <b-dropdown id="dropdown-dropright" dropright text="Script language" variant="primary" style="width: 100%">
+                         <form v-on:submit.prevent="send">
+                             <div style="margin-left: 5%; width: 100%">
+   <div class="custom-control custom-radio" >
+  <input type="radio" id="customRadio1" name="customRadio" v-model="languageValue" v-bind:value="languageEnglish" class="custom-control-input">
+  <label class="custom-control-label" for="customRadio1">English</label>
+</div>
+<div class="custom-control custom-radio">
+  <input type="radio" id="customRadio2" v-model="languageValue" v-bind:value="languaguePolish" name="customRadio" class="custom-control-input">
+  <label class="custom-control-label" for="customRadio2">Polski</label>
+</div>
+</div>
+                         </form>
+  </b-dropdown>
                     </div>
                 </div>
                 </li>
@@ -138,8 +198,8 @@
           Templates
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template.id, template.name, true)">{{template.name}}</button>
+                        <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, true)">{{template.shortName}}</button>
                         </li>
                     </ul>
                 </li>
@@ -188,10 +248,23 @@ export default {
         selectedTemplateName: "",
         selectedTemplateNameRight: "",
         preSelection: false,
-        templateDivsPercent: 49
+        templateDivsPercent: 49,
+        selected: null,
+        languageValue: "",
+        languaguePolish: "pol",
+        languageEnglish: "eng",
+        languageValue: 'pol',
+        languageOptions: [
+            { text: 'Polski', value: 'pol' },
+            { text: 'English', value: 'eng' },
+        ]
     }),
     methods: {
-   getTemplate: function (template, isRightTemplate) {
+    onClick: function() {
+        // Close the menu and (by passing true) return focus to the toggle button
+        this.$refs.dropdown.show(true)
+      },
+    getTemplate: function (template, isRightTemplate) {
             this.$Progress.start();
             if(isRightTemplate){
                 this.selectedTemplateNameRight = template.shortName;
@@ -207,7 +280,7 @@ export default {
            // else{   
 
             
-            templatesService.loadTemplatesData(template, isRightTemplate)
+            templatesService.loadTemplatesData(template, isRightTemplate, this.languageValue)
                 .then(response => {
                     this.$Progress.finish();
                    // alert("ok");
@@ -238,6 +311,21 @@ export default {
         },
         collapseAlElements: function () {
                     serverBus.$emit('collapseAlElements');              
+        },
+        onChangeScriptLanguage: function(language){
+
+            this.$Progress.start()
+            templatesService.getAll(language)
+            .then(response => { 
+                this.$Progress.finish();
+                this.loading = true;
+                this.templates = response.data;
+            })
+            .catch(e => {
+                if(e.response.status === 401){
+                    this.logout();
+                }
+            })
         },
         showAllElements: function () {
                     serverBus.$emit('showAllElements');              
@@ -304,8 +392,6 @@ export default {
             .then(response => { 
                 this.$Progress.finish();
                 this.loading = true;
-           
-
                 this.templates = response.data;
             })
             .catch(e => {
@@ -319,3 +405,45 @@ export default {
     },
 }
 </script>
+
+<style>
+
+.dropdown-menu {
+	min-width: 200px;
+}
+.dropdown-menu.columns-2 {
+	min-width: 400px;
+}
+.dropdown-menu.columns-3 {
+	min-width: 600px;
+}
+.dropdown-menu li a {
+	padding: 5px 15px;
+	font-weight: 300;
+}
+.multi-column-dropdown {
+	list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.multi-column-dropdown li a {
+	display: block;
+	clear: both;
+	line-height: 1.428571429;
+	color: #333;
+	white-space: normal;
+}
+.multi-column-dropdown li a:hover {
+	text-decoration: none;
+	color: #262626;
+	background-color: #999;
+}
+ 
+@media (max-width: 767px) {
+	.dropdown-menu.multi-column {
+		min-width: 240px !important;
+		overflow-x: hidden;
+	}
+}
+
+</style>>

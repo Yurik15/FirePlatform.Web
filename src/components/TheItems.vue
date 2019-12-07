@@ -303,7 +303,6 @@ export default {
         },
         preselect(isRightTemplate)
         {
-            alert("ok");
 
             const auth = {
             'Content-Type': 'application/json;',
@@ -316,22 +315,77 @@ export default {
             axios.post(env + '/api/Calculations/Preselection', {
                     isRightTemplate: isRightTemplate,
                     preselectionEnabled: true,
-                    userId: this.userId
+                    userId: $cookies.get('userId')
                 }, auth)
-                .then(response => {
-                    if(isRightTemplate){
-                       
-                        this.rightMainCollection = mainCollection;
-                        this.templateOnLoad(mainCollection); 
-                    }
-                    else{
-                        this.leftMainCollection = mainCollection;
-                        this.templateOnLoad(mainCollection); 
-                    }
+                 .then(response => {
+
+                      if(this.isRightTemplate){
+                this.mainCollection = this.rightMainCollection;
+            }else{
+                this.mainCollection = this.leftMainCollection;
+            }
+
+                    var updatedItems = response.data.item2;
+                    var updatedGroupItems = response.data.item1;
+
+                    //update groups
+                    updatedGroupItems.forEach(newGroupItem => {
+                        this.mainCollection.forEach(groupItem => {
+                            if (groupItem.indexGroup === newGroupItem.indexGroup) {
+                                groupItem.isVisible = newGroupItem.isVisible;
+                                //groupItem.expanded = newGroupItem.expanded;
+                            }
+                        });
+                    });
+
+                        updatedItems.forEach(newItem => {
+
+                        var isExists = false;
+                        this.mainCollection.forEach(itemGroup => {
+
+                            itemGroup.items.forEach(item => {
+                                if (item.numID === newItem.numID &&
+                                    item.groupID === newItem.groupID) {
+
+                                    item.groupID = newItem.groupID;
+                                    item.groupTitle = newItem.groupTitle;
+                                    item.numID = newItem.numID;
+                                    item.title = newItem.title;
+                                    item.type = newItem.type;
+                                    item.isVisible = newItem.isVisible;
+                                    item.tooltipText = newItem.tooltipText;
+                                    item.value = newItem.value;
+
+                                    isExists = true;
+
+                                    if(item.type === 'Combo'){
+                                        item.comboItems.forEach(comboItem => {
+                                             if(comboItem.displayName.includes(this.SEPARATOR) === false)
+                                            {
+                                                comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        });
+ 
+                    });
+
+                if(this.isRightTemplate){
+                     this.rightMainCollection = this.mainCollection;
+                }else{
+                     this.leftMainCollection = this.mainCollection;
+                }
+                    this.loading = false;
+                    this.$Progress.finish();
+
                 })
                 .catch(e => {
-                    alert("Error is occured, please try again. Error: " + e.toString());
-                });
+                    this.loading = false;
+                    console.log("exception is occured: " + e);
+                    this.$Progress.fail();
+                })
                 
         }, 
         fetchPicture(numberId, groupId){
