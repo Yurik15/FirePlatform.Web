@@ -102,7 +102,7 @@
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
       <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
-        <option :value="undefined" disabled hidden>-- Please select --</option>
+        <option :value="selected" disabled hidden>-- Please select --</option>
         <option   
             v-for="(selectedItem, index) in (itemDetails.comboItems)" 
             :value="selectedItem.displayName" :key="index">
@@ -155,7 +155,8 @@ export default {
         showAllTextCollection: [],
         userId: $cookies.get('userId'),
         token: $cookies.get('token'),
-        collapseID: 0
+        collapseID: 0,
+        selected: undefined
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
@@ -167,7 +168,7 @@ export default {
                 var childNodes = e.currentTarget.childNodes;
                 var i = 0;
                 childNodes.forEach(el => {
-                    if(el.selected === true)
+                   if(el.selected === true)
                     {
                         indexOfComboItem = i;
                         value = el.text;
@@ -211,7 +212,9 @@ export default {
                 })
                 .then(response => {
 
-                    var updatedItems = response.data.item2;
+                    
+
+                     var updatedItems = response.data.item2;
                     var updatedGroupItems = response.data.item1;
 
                     //update groups
@@ -347,6 +350,13 @@ export default {
                                 if (item.numID === newItem.numID &&
                                     item.groupID === newItem.groupID) {
 
+                                     if(item.type === 'Combo'){
+                                        
+                                        //alert(newItem.nameVariable);
+                                                item.nameVariable = newItem.nameVariable;
+                                    }                                    
+                                    
+                                    
                                     item.groupID = newItem.groupID;
                                     item.groupTitle = newItem.groupTitle;
                                     item.numID = newItem.numID;
@@ -358,14 +368,7 @@ export default {
 
                                     isExists = true;
 
-                                    if(item.type === 'Combo'){
-                                        item.comboItems.forEach(comboItem => {
-                                             if(comboItem.displayName.includes(this.SEPARATOR) === false)
-                                            {
-                                                comboItem.displayName = comboItem.displayName + this.SEPARATOR + comboItem.groupKey;
-                                            }
-                                        })
-                                    }
+
                                 }
                             })
                         });

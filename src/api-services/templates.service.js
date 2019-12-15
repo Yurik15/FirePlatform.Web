@@ -21,6 +21,25 @@ export default {
       }
       });
   },
+  clearTemplateDataPerUser(template, isRightTemplate)
+  {
+    const auth = {
+      'Content-Type': 'application/json;',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST',
+          'Authorization': 'Bearer ' + $cookies.get('token')
+}
+
+      axios.post(env + '/api/Calculations/ClearTemplates', {
+        userId: $cookies.get('userId'),
+        lng: template.lng,
+        shortName: template.shortName,
+        longName:template.longName,
+        stage :template.stage,
+        topic : template.topic,
+        isRightTemplate: isRightTemplate
+    }, auth)
+  },
   loadTemplatesData(template, isRightTemplate, languageValue)
   {
     const auth = {

@@ -5,34 +5,6 @@
         <vue-progress-bar></vue-progress-bar>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Recipient:</label>
-            <input type="text" class="form-control" id="recipient-name">
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="col-form-label">Message:</label>
-            <textarea class="form-control" id="message-text"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send message</button>
-      </div>
-    </div>
-  </div>
-</div>
 
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -133,7 +105,7 @@
                    </div> 
                    <div class="col-sm-4" style="padding: 2px !important;">
                            <form v-on:submit.prevent="send">
-                 <b-form-select v-model="savedTemplate" class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
+                 <b-form-select class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
       <option :value="undefined" disabled hidden>-- Select saved --</option>
       <option v-for="savedTemplate in template.savedTemplates" v-bind:key="savedTemplate.savedName" v-bind:value="savedTemplate.savedName">
           {{savedTemplate.savedName}}
@@ -179,12 +151,12 @@
                    </ul>
                    </div>
                      </div>
-                   <div class="col-sm-1" style="text-align: center">   
+                   <div class="col-sm-2" style="text-align: center">   
                        
                    <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
                    </div>
            
-                   <div class="col-sm-2" style="text-align: right">
+                   <div class="col-sm-1" style="text-align: right">
                         <button v-on:click="saveTemplate(false)" type="button" class="btn btn-primary">S</button>
                               <button v-on:click="collapseAlElements()" type="button" class="btn">
          <img style="height: 25px; " src="../assets/collapse.png">
@@ -260,54 +232,51 @@ export default {
         ]
     }),
     methods: {
-    onClick: function() {
-        // Close the menu and (by passing true) return focus to the toggle button
-        this.$refs.dropdown.show(true)
-      },
     getTemplate: function (template, isRightTemplate) {
+
             this.$Progress.start();
             if(isRightTemplate){
                 this.selectedTemplateNameRight = template.shortName;
             }else{
                 this.selectedTemplateName = template.shortName;
             }
-           // var currentTemplate = JSON.parse(localStorage.getItem('template' + templateId));
-           // if(currentTemplate){
-                //alert("exists");
-               // this.$Progress.finish();
-              //  serverBus.$emit('itemsGroup', currentTemplate);
-          //  }
-           // else{   
-
-            
-            templatesService.loadTemplatesData(template, isRightTemplate, this.languageValue)
-                .then(response => {
-                    this.$Progress.finish();
-                   // alert("ok");
-                    //alert(JSON.stringify(response));
-                    //var responseDataCol = response.data;
-                    //var responseData = "";
-                    // responseDataCol.forEach(base64Part => {
-                         // alert(JSON.stringify(base64Part));
-                                //responseData += LZString.decompressFromBase64(base64Part);
-                               //alert(JSON.stringify(responseData)); 
-                        //});
-                    var finalData = response.data;
-                   // alert(JSON.stringify(finalData));
-                    //localStorage.setItem('template' + templateId, JSON.stringify(response.data));
-                    if(isRightTemplate){
-                        serverBus.$emit('itemsGroupRight', finalData);
+            var compressedTemplateFromCookies = JSON.parse(localStorage.getItem('template_' + template.shortName));
+            var currentTemplate = LZString.decompress(compressedTemplateFromCookies);
+            if(currentTemplate){
+                currentTemplate = JSON.parse(currentTemplate);
+                templatesService.clearTemplateDataPerUser(template, isRightTemplate);
+                
+                if(isRightTemplate){
+                        serverBus.$emit('itemsGroupRight', currentTemplate);
                     }else {
-                        serverBus.$emit('itemsGroupLeft', finalData);
+                        serverBus.$emit('itemsGroupLeft', currentTemplate);
                     }
-                })
+            }
+            else{             
+                templatesService.loadTemplatesData(template, isRightTemplate, this.languageValue)
+                .then(response => {
+
+                    var responseData = response.data;
+                    var compressedData = LZString.compress(JSON.stringify(responseData));
+                    localStorage.setItem('template_' + template.shortName, JSON.stringify(compressedData));
+                   
+                    if(isRightTemplate){
+                        serverBus.$emit('itemsGroupRight', responseData);
+                    }else {
+                        serverBus.$emit('itemsGroupLeft', responseData);
+                    }
+                   
+
+                }
+                )
                 .catch(e => {                    
                     this.$Progress.fail();
                     if(e.response.status === 401){
                     this.logout();
                 }
+                this.$Progress.finish();
                 })
-            //}
+            }
         },
         collapseAlElements: function () {
                     serverBus.$emit('collapseAlElements');              
@@ -369,21 +338,12 @@ export default {
                     userId: this.userId
                 }, auth)
                 .then(response => {
-                    if(response.data !== ""){
-                        VueCookies.set('userId', response.data.userId);
-                        VueCookies.set('token', response.data.token);
-                        this.$router.push(rootName);
-                    }
-                    else{
-                        this.wrongloginData = true;
-                    }
+                    
                 })
                 .catch(e => {
                     alert("Error is occured, please try again. Error: " + e.toString());
                 });
                 }
-            
-        
         
     },
     created() {

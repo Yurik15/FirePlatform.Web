@@ -1,12 +1,12 @@
 <template>
-<splitpanes class="default-theme" @resize="paneSize = $event[0].size" style="height: 100%; min-height: 100vh;">
-  <pane :size="paneSize">
+<splitpanes class="default-theme"  style="height: 100%; min-height: 100vh;">
+  <pane>
     <span>
           <TheNavbar :isRightTemplate='false'></TheNavbar>
           <TheItems :isRightTemplate='false'></TheItems>
     </span>
   </pane>
-  <pane :size="100 - paneSize">
+  <pane>
     <span>
         <TheNavbar :isRightTemplate='true'></TheNavbar>
           <TheItems :isRightTemplate='true'></TheItems>
@@ -22,6 +22,7 @@ import 'splitpanes/dist/splitpanes.css'
 import axios from 'axios'
 import TheItems from '@/components/TheItems.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
+import vue2 from '@/components/vue2.vue'
 import {
     serverBus
 } from '../main.js';
@@ -33,7 +34,8 @@ export default {
         TheItems,
         TheNavbar,
         Splitpanes,
-        Pane
+        Pane,
+        vue2
     },
     data: () => ({
         SEPARATOR: 'sepComboItem',
