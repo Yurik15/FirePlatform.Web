@@ -105,10 +105,10 @@
                    </div> 
                    <div class="col-sm-4" style="padding: 2px !important;">
                            <form v-on:submit.prevent="send">
-                 <b-form-select class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
-      <option :value="undefined" disabled hidden>-- Select saved --</option>
-      <option v-for="savedTemplate in template.savedTemplates" v-bind:key="savedTemplate.savedName" v-bind:value="savedTemplate.savedName">
-          {{savedTemplate.savedName}}
+                 <b-form-select v-model="selectedSavedTemplateName" @change="onChangeSavedTemplate(template.shortName)"  class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
+      <option value="null" selected >-- Select saved --</option>
+      <option v-for="savedTemplate in template.savedTemplates"  v-bind:key="savedTemplate.savedName" v-bind:value="savedTemplate.savedName">
+          {{savedTemplate.savedName}} 
             </option>
     </b-form-select>
       </form>
@@ -195,7 +195,8 @@
     </nav>
     </div>
     </div>
-    
+
+
 </template>
 
 <script>
@@ -229,11 +230,13 @@ export default {
         languageOptions: [
             { text: 'Polski', value: 'pol' },
             { text: 'English', value: 'eng' },
-        ]
+        ],
+        selectedSavedTemplateName: "",
+        selectSavedTemplatesLastChanged: "",
+        selectedSavedTemplateName: null
     }),
     methods: {
     getTemplate: function (template, isRightTemplate) {
-
             this.$Progress.start();
             if(isRightTemplate){
                 this.selectedTemplateNameRight = template.shortName;
@@ -242,7 +245,7 @@ export default {
             }
             var compressedTemplateFromCookies = JSON.parse(localStorage.getItem('template_' + template.shortName));
             var currentTemplate = LZString.decompress(compressedTemplateFromCookies);
-            if(currentTemplate){
+            if(currentTemplate && this.selectSavedTemplatesLastChanged !== template.shortName){
                 currentTemplate = JSON.parse(currentTemplate);
                 templatesService.clearTemplateDataPerUser(template, isRightTemplate);
                 
@@ -253,6 +256,9 @@ export default {
                     }
             }
             else{             
+                if(this.selectSavedTemplatesLastChanged === template.shortName){
+                    template.savedName = this.selectedSavedTemplateName;
+                }
                 templatesService.loadTemplatesData(template, isRightTemplate, this.languageValue)
                 .then(response => {
 
@@ -279,7 +285,11 @@ export default {
             }
         },
         collapseAlElements: function () {
-                    serverBus.$emit('collapseAlElements');              
+                serverBus.$emit('collapseAlElements');              
+        },
+        onChangeSavedTemplate(templateShortName)
+        {
+            this.selectSavedTemplatesLastChanged = templateShortName;
         },
         onChangeScriptLanguage: function(language){
 
@@ -325,7 +335,8 @@ export default {
         {       
                 var templateName = prompt("Please enter name of saving template");
                 
-                    const env = 'https://localhost:44358';
+                    const env = 'http://shine15-001-site1.btempurl.com';
+                    //const env = 'https://localhost:44358';
                     const auth = {
                     'Content-Type': 'application/json;',
                         'Access-Control-Allow-Origin': '*',

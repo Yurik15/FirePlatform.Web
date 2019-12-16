@@ -197,8 +197,8 @@ export default {
             })
             }   
 
-            //const env = 'http://shine15-001-site1.btempurl.com';
-            const env = 'https://localhost:44358';
+            const env = 'http://shine15-001-site1.btempurl.com';
+            //const env = 'https://localhost:44358';
             
                 axios.get(env + '/api/Calculations/Set?groupId=' + groupId + '&itemId=' + itemId + '&value='
                  + value + '&userId=' + this.userId + '&isRightTemplate=' + this.isRightTemplate,
@@ -313,8 +313,8 @@ export default {
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
 }           
-
-             const env = 'https://localhost:44358';
+            const env = 'http://shine15-001-site1.btempurl.com';
+            // const env = 'https://localhost:44358';
             axios.post(env + '/api/Calculations/Preselection', {
                     isRightTemplate: isRightTemplate,
                     preselectionEnabled: true,
@@ -392,8 +392,8 @@ export default {
                 
         }, 
         fetchPicture(numberId, groupId){
-            //const env = 'http://shine15-001-site1.btempurl.com';
-            const env = 'https://localhost:44358';
+            const env = 'http://shine15-001-site1.btempurl.com';
+            //const env = 'https://localhost:44358';
              if(this.isRightTemplate){
                 this.mainCollection = this.rightMainCollection;
             }else{

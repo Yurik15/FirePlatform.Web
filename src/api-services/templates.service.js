@@ -1,8 +1,8 @@
 import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
-//const env = 'http://shine15-001-site1.btempurl.com';
-const env = 'https://localhost:44358/';
+const env = 'http://shine15-001-site1.btempurl.com';
+//const env = 'https://localhost:44358/';
   
 export default {
   getAll(language) {
@@ -54,8 +54,9 @@ export default {
         lng: languageValue,
         shortName: template.shortName,
         longName:template.longName,
-        stage :template.stage,
+        stage : template.stage,
         topic : template.topic,
+        savedName: template.savedName,
         isRightTemplate: isRightTemplate
     }, auth)
     
