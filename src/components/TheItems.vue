@@ -20,13 +20,13 @@
                             <b-card-header class="d-flex justify-content-center p-1 cardHeaderOverride headerElementRaw" header-tag="header" role="tab">
                                 <b-btn  v-b-toggle="'collapse' + index + hideNavbar2()" class="blockOverride" :aria-expanded="true" block href="#" data-target="#'collapse' + index + hideNavbar2()" data-toggle="'collapse' + index + hideNavbar2()" variant="info" aria-controls="'collapse' + index + hideNavbar2()">{{item.title}}</b-btn>
                             </b-card-header>
-                        </div>
+                        
                         <b-collapse :id="'collapse' + index + hideNavbar2()" role="tabpanel" v-model="item.expanded">
                             <b-card-body class="divCard">
                             <div >
                                 <div class="form-group" :id="'collapse' + index + hideNavbar2()" v-for="(itemDetails, index) in item.items"
                                  v-bind:value="itemDetails.Value" :key="index">
-                                    <div v-if="itemDetails.isVisible === true && itemDetails.isGroupVisible === true">
+                                    <div v-if="itemDetails.isVisible === true">
                                         <div v-if="itemDetails.type === 'Text'" class="d-flex justify-content-center elementRaw">
 <div>
     <div v-if="itemDetails.picture !== null"> 
@@ -74,25 +74,25 @@
 
 </p>
 </div>
-  <div v-else-if="itemDetails.type === 'Formula' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">    
+  <div v-else-if="itemDetails.type === 'Formula' && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">    
     <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
     <p class = "itemDetailsValue textFormula formula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
- <div v-else-if="itemDetails.type === 'BackCalc' && backCalcsHidden === false && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">    
+ <div v-else-if="itemDetails.type === 'BackCalc' && backCalcsHidden === false && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">    
 <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
     <p class = "itemDetailsValue textFormula form-control disabledItem" :disabled="true" type="text" style="height: 100% !important"
     @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
     :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID + ' type ' + itemDetails.type" >{{itemDetails.value}}</p>
 </div>
-<div v-else-if="itemDetails.type === 'Num' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
+<div v-else-if="itemDetails.type === 'Num' && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">
   <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
   <input class = "itemDetailsValue numeric form-control" type="number" 
   @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
   :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
 </div>
-<div v-else-if="itemDetails.type === 'Check' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
+<div v-else-if="itemDetails.type === 'Check' && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">
   <label class = "itemDetailsTitle" v-text = "itemDetails.title"
     v-bind:class="{ OneLineTitle:  !showAllTextCollection.includes('title' + itemDetails.numID)}"
     @click="calculateShowAllTextForItems('title' + itemDetails.numID)"/>
@@ -102,10 +102,10 @@
    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
   </div>
 </div>
-<div v-else-if="itemDetails.type === 'HTML' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
+<div v-else-if="itemDetails.type === 'HTML' && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">
   <div v-html="itemDetails.value"></div>
 </div>
-<div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
+<div v-else-if="itemDetails.type === 'Combo' && itemDetails.isVisible === true" class="d-flex justify-content-center elementRaw">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
       <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control"  v-model="itemDetails.NameVarible"
@@ -128,6 +128,7 @@
                             </div>
         </b-card-body>
         </b-collapse>
+        </div>
         </body>
         </b-card>
     </div>
