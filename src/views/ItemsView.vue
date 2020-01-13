@@ -1,4 +1,6 @@
 <template>
+<div>
+<div class="hideForMobile">
 <splitpanes class="default-theme"  style="height: 100%; min-height: 100vh;">
   <pane>
     <span>
@@ -13,7 +15,12 @@
     </span>
   </pane>
 </splitpanes>
-
+</div>
+<div class="showForMobile">
+          <TheNavbar :isRightTemplate='true'></TheNavbar>
+          <TheItems :isRightTemplate='true'></TheItems>
+  </div>
+</div>
 </template>
 
 <script>

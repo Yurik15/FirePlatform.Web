@@ -1,5 +1,56 @@
 <template>
 <div>
+    <div v-if="loader">
+     <div class="text-info d-flex align-items-center justify-content-center mb-3 modal">
+    <b-spinner style="width: 5rem; height: 5rem;" label="Loading..."></b-spinner>
+  </div>
+  </div>
+  <div>
+ <div class="showForMobile">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <vue-progress-bar></vue-progress-bar>
+    
+
+                 <ul class="navbar-nav mr-auto" style="text-align: left; max-height: 400px; overflow: auto; " >
+
+                <li class="nav-item dropdown menuDropDown">
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <img style="height: 25px;" src="../assets/scripts.png">
+        </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
+                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, true)">{{template.shortName}}</button>
+                        </li>
+                    </ul>
+                </li>
+                
+                </ul>
+        
+
+        <div  style="text-align: center" v-if="this.isRightTemplate === true">           
+                   <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateNameRight}}</span>
+                   </div>
+ <div  v-if="this.isRightTemplate === true">
+                        </div>
+                    <div style="text-align: right">
+
+                                        <button v-if="this.collapsedAll === true" v-on:click="collapseExpandGroups()" type="button" class="btn">
+         <img style="height: 25px; " src="../assets/expand.png">
+</button>
+        <button v-if="this.collapsedAll === false" v-on:click="collapseExpandGroups()" type="button" class="btn">
+         <img style="height: 25px; " src="../assets/collapse.png">
+</button>
+                          <button type="button" class="btn" @click="logout()">
+         <img style="height: 25px;" src="../assets/logout.png">
+</button>
+                        </div>
+ </nav>
+    </div>
+    </div>
+
+
+
+  <div class="hideForMobile">
 <div v-if="this.isRightTemplate === false"> 
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <vue-progress-bar></vue-progress-bar>
@@ -9,12 +60,12 @@
     <span class="navbar-toggler-icon"></span>
   </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <div class="col-sm-2">
+            <div class="col-sm-1">
             <ul class="navbar-nav mr-auto" >
 
                 <li class="nav-item dropdown menuDropDown">
-                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Templates
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img style="height: 25px;" src="../assets/scripts.png">
         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.id" :key="index">
@@ -22,30 +73,37 @@
                         </li>
                     </ul>
                 </li>
-                 <li class="nav-item dropdown menuDropDown">
-                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Options
+                   <li class="nav-item dropdown menuDropDown">
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <img style="height: 25px;" src="../assets/options.png">
+
         </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <div class="menuButton">
-                    <a v-on:click="showAllElements()" class="menuButton dropdown-item" href="#">Expand All</a>
                     <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">{{hideBackCalcsText}}</a>
+                                        <a v-on:click="preselectLeft()" class="menuButton dropdown-item" href="#">Preselect left</a>
+                                        <a v-on:click="preselectRight()" class="menuButton dropdown-item" href="#">Preselect right</a>
+                   
                     </div>
                 </div>
+                    
+              
                 </li>
                    </ul>
                    </div>
                    <div class="col-sm-8" style="text-align: center">   
                        
-                   <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
+                   <span class="menuDefault" style="text-overflow: ellipsis;overflow: hidden; white-space: nowrap;color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
                    </div>
-                   <div class="col-sm-2" >
-           </div>
+               
         </div>
 
              
-        <span class="menuMobile" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
-           <button v-on:click="collapseAlElements()" type="button" class="btn">
+        <span class="menuMobile" style="text-overflow: ellipsis;overflow: hidden; white-space: nowrap;color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
+                   <button v-if="this.collapsedAll === true" v-on:click="collapseExpandGroups()" type="button" class="btn">
+         <img style="height: 25px; " src="../assets/expand.png">
+</button>
+        <button v-if="this.collapsedAll === false" v-on:click="collapseExpandGroups()" type="button" class="btn">
          <img style="height: 25px; " src="../assets/collapse.png">
 </button>
     </nav>
@@ -62,47 +120,25 @@
     <span class="navbar-toggler-icon"></span>
   </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <div class="col-sm-1">
+            <div class="col-sm-0.5">
             <ul class="navbar-nav mr-auto" >
 
                 <li class="nav-item dropdown menuDropDown">
-                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Templates
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img style="height: 25px;" src="../assets/scripts.png">
         </a>
-                    <ul class="dropdown-menu "  style="min-width: 700px" aria-labelledby="navbarDropdownMenuLink">
-                          <div class="row" style="margin: 0px; align-items: center;">
-                              <div class="col-sm-2" style="padding: 2px !important;">
-                                  Script language
-                                  </div>
-                                  <div class="col-sm-2" style="margin-bottom: 3px !important; padding: 5px !important">
-                             <form v-on:submit.prevent="send">                                                                                             
-                <b-form-select @change="onChangeScriptLanguage(languageValue)" v-model="languageValue" class="mb-3" >
-  <option v-for="option in languageOptions" v-bind:key="option.value" v-bind:value="option.value">
-    {{ option.text }}
-  </option>
-<span>Selected: {{ selected }}</span>
-                </b-form-select>
-            </form>
-         </div>
-  </div>
+                    <ul class="dropdown-menu"  style="min-width: 600px; height: 90vh;
+    width: 50% !important;
+    overflow-y: scroll;overflow-x: hidden;" aria-labelledby="navbarDropdownMenuLink">
+                         
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
                             
-                            <div>
+                            <div >
                                 <div class="row">
-          <div class="col-sm-4 multi-column-dropdown" style="min-width: 200px">
-              <button class="dropdown-item " type="button" v-on:click="getTemplate(template, false)">{{template.shortName}}</button>
+          <div class="col-sm-6 multi-column-dropdown">
+              <button class="dropdown-item" type="button" v-on:click="getTemplate(template, false)">{{template.shortName}}</button>
                    </div> 
-                   <div class="col-sm-2" style="padding: 2px !important;">
-             <div class="dropdown">
-      <form v-on:submit.prevent="send">
-    <b-form-select class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
-      <option :value="undefined" disabled hidden>Latest</option>
-        
-    </b-form-select>
-  </form>
-
-</div>
-                   </div> 
+    
                    <div class="col-sm-4" style="padding: 2px !important;">
                            <form v-on:submit.prevent="send">
                  <b-form-select v-model="selectedSavedTemplateName" @change="onChangeSavedTemplate(template.shortName)"  class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
@@ -113,7 +149,7 @@
     </b-form-select>
       </form>
                    </div> 
-                    <div class="col-sm-1">
+                    <div class="col-sm-2">
                         <button v-on:click="getTemplate(template, false)" class="btn btn-secondary">Load</button>
                         </div>
                                    </div>
@@ -122,77 +158,99 @@
                     </ul>
                 </li>
                  <li class="nav-item dropdown menuDropDown">
-                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Options
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <img style="height: 25px;" src="../assets/options.png">
+
         </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <div class="menuButton">
-                    <a v-on:click="showAllElements()" class="menuButton dropdown-item" href="#">Expand All</a>
                     <a v-on:click="hideBackCalcs()" class="menuButton dropdown-item" href="#">{{hideBackCalcsText}}</a>
-                    <a v-on:click="preselectLeft()" class="menuButton dropdown-item" href="#">Preselect left</a>
-                    <a v-on:click="preselectRight()" class="menuButton dropdown-item" href="#">Preselect right</a>
-                     <b-dropdown id="dropdown-dropright" dropright text="Script language" variant="primary" style="width: 100%">
-                         <form v-on:submit.prevent="send">
-                             <div style="margin-left: 5%; width: 100%">
-   <div class="custom-control custom-radio" >
-  <input type="radio" id="customRadio1" name="customRadio" v-model="languageValue" v-bind:value="languageEnglish" class="custom-control-input">
-  <label class="custom-control-label" for="customRadio1">English</label>
-</div>
-<div class="custom-control custom-radio">
-  <input type="radio" id="customRadio2" v-model="languageValue" v-bind:value="languaguePolish" name="customRadio" class="custom-control-input">
-  <label class="custom-control-label" for="customRadio2">Polski</label>
-</div>
-</div>
-                         </form>
-  </b-dropdown>
+                                          <a v-on:click="preselectLeft()" class="menuButton dropdown-item" href="#">Preselect left</a>
+                                        <a v-on:click="preselectRight()" class="menuButton dropdown-item" href="#">Preselect right</a>
+                   
                     </div>
                 </div>
+                    
+              
                 </li>
                    </ul>
                    </div>
                      </div>
-                   <div class="col-sm-2" style="text-align: center">   
+
+                   <div class="col-sm-4" style="text-align: center">   
                        
-                   <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
+                   <span class="menuDefault" style="text-overflow: ellipsis;overflow: hidden; white-space: nowrap;color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateName}}</span>
                    </div>
            
                    <div class="col-sm-1" style="text-align: right">
-                        <button v-on:click="saveTemplate(false)" type="button" class="btn btn-primary">S</button>
-                              <button v-on:click="collapseAlElements()" type="button" class="btn">
-         <img style="height: 25px; " src="../assets/collapse.png">
+                                          <button type="button" class="btn" @click="saveTemplate(false)">
+                                            <img style="height: 25px;" src="../assets/save.png">
 </button>
+
            </div>        
-           <div class="col-sm-2" v-if="this.isRightTemplate === true">
+           <div class="col-sm-1" v-if="this.isRightTemplate === true">
                  <ul class="navbar-nav mr-auto" style="text-align: left" >
 
-                <li class="nav-item dropdown menuDropDown">
-                    <a class="nav-link dropdown-toggle navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Templates
+               <li class="nav-item dropdown menuDropDown">
+                    <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <img style="height: 25px;" src="../assets/scripts.png">
         </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu"  style="min-width: 600px; height: 90vh;
+    width: 50% !important;
+    overflow-y: scroll;overflow-x: hidden;" aria-labelledby="navbarDropdownMenuLink">
+                         
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
-                            <button class="dropdown-item " type="button" v-on:click="getTemplate(template, true)">{{template.shortName}}</button>
+                            
+                            <div >
+                                <div class="row">
+          <div class="col-sm-6 multi-column-dropdown">
+              <button class="dropdown-item" type="button" v-on:click="getTemplate(template, true)">{{template.shortName}}</button>
+                   </div> 
+    
+                   <div class="col-sm-4" style="padding: 2px !important;">
+                           <form v-on:submit.prevent="send">
+                 <b-form-select v-model="selectedSavedTemplateName" @change="onChangeSavedTemplate(template.shortName)"  class="mb-3" style="margin-bottom: 3px !important; padding: 2px !important">
+      <option value="null" selected >-- Select saved --</option>
+      <option v-for="savedTemplate in template.savedTemplates"  v-bind:key="savedTemplate.savedName" v-bind:value="savedTemplate.savedName">
+          {{savedTemplate.savedName}} 
+            </option>
+    </b-form-select>
+      </form>
+                   </div> 
+                    <div class="col-sm-2">
+                        <button v-on:click="getTemplate(template, true)" class="btn btn-secondary">Load</button>
+                        </div>
+                                   </div>
+                                     </div>
                         </li>
                     </ul>
                 </li>
                 </ul>
            </div>
 
-        <div class="col-sm-2" style="text-align: center" v-if="this.isRightTemplate === true">           
-                   <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateNameRight}}</span>
+        <div class="col-sm-3" style="text-align: center" v-if="this.isRightTemplate === true">           
+                   <span class="menuDefault" style="text-overflow: ellipsis;overflow: hidden; white-space: nowrap;color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateNameRight}}</span>
                    </div>
- <div class="col-sm-1" v-if="this.isRightTemplate === true">
+ <div class="col-sm-3.8" v-if="this.isRightTemplate === true">
                         </div>
                     <div style="text-align: right">
 
-<button v-on:click="saveTemplate(true)" type="button" class="btn btn-primary">S</button>
+   <button type="button" class="btn" @click="saveTemplate(true)">
+                                            <img style="height: 25px;" src="../assets/save.png">
+</button>
 
-                          <button v-on:click="collapseAlElements()" type="button" class="btn">
-                     <img style="height: 25px; " src="../assets/collapse.png">
-                          </button>
-                <button v-on:click="logout()" style="color: white" type="button" class="btn">Logout</button>
+                                  <button v-if="this.collapsedAll === true" v-on:click="collapseExpandGroups()" type="button" class="btn">
+         <img style="height: 25px; " src="../assets/expand.png">
+</button>
+        <button v-if="this.collapsedAll === false" v-on:click="collapseExpandGroups()" type="button" class="btn">
+         <img style="height: 25px; " src="../assets/collapse.png">
+</button>
+                              <button type="button" class="btn" @click="logout()">
+         <img style="height: 25px;" src="../assets/logout.png">
+</button>
                         </div>        
     </nav>
+    </div>
     </div>
     </div>
 
@@ -208,41 +266,43 @@ import {
 } from '../main.js';
 
 import LZString from 'lz-string'
+import Culture from '@/lib/culture-resources';
 
 export default {
     
     name: 'TheNavbar',
     data: () => ({
         templates: [],
-        loading: false,
         hideBackCalcsText: 'Show BackCalcs',
-        collapseAllText: 'Collapse All',
         userId: $cookies.get('userId'),
         selectedTemplateName: "",
         selectedTemplateNameRight: "",
         preSelection: false,
         templateDivsPercent: 49,
         selected: null,
-        languageValue: "",
-        languaguePolish: "pol",
-        languageEnglish: "eng",
-        languageValue: 'pol',
-        languageOptions: [
-            { text: 'Polski', value: 'pol' },
-            { text: 'English', value: 'eng' },
-        ],
         selectedSavedTemplateName: "",
         selectSavedTemplatesLastChanged: "",
-        selectedSavedTemplateName: null
+        selectedSavedTemplateName: null,
+        collapsedAll: false
     }),
     methods: {
+          isMobile() {
+   if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+     return true
+   } else {
+     return false
+   }},
+    getCulture(value)
+    {
+        return Culture.getValue(value, $cookies.get('lng'));
+    },
     getTemplate: function (template, isRightTemplate) {
-            this.$Progress.start();
             if(isRightTemplate){
                 this.selectedTemplateNameRight = template.shortName;
             }else{
                 this.selectedTemplateName = template.shortName;
             }
+            
             var compressedTemplateFromCookies = JSON.parse(localStorage.getItem('template_' + template.shortName));
             var currentTemplate = LZString.decompress(compressedTemplateFromCookies);
             if(currentTemplate && this.selectSavedTemplatesLastChanged !== template.shortName){
@@ -255,37 +315,36 @@ export default {
                         serverBus.$emit('itemsGroupLeft', currentTemplate);
                     }
             }
-            else{             
+            else{            
                 if(this.selectSavedTemplatesLastChanged === template.shortName){
                     template.savedName = this.selectedSavedTemplateName;
                 }
-                templatesService.loadTemplatesData(template, isRightTemplate, this.languageValue)
+                 
+                templatesService.loadTemplatesData(template, isRightTemplate, $cookies.get('lng'))
                 .then(response => {
 
                     var responseData = response.data;
                     var compressedData = LZString.compress(JSON.stringify(responseData));
                     localStorage.setItem('template_' + template.shortName, JSON.stringify(compressedData));
-                   
+                    
                     if(isRightTemplate){
                         serverBus.$emit('itemsGroupRight', responseData);
                     }else {
                         serverBus.$emit('itemsGroupLeft', responseData);
                     }
-                   
+                    this.loader = false;
 
                 }
                 )
-                .catch(e => {                    
-                    this.$Progress.fail();
+                .catch(e => {      
+                    this.loader = false;
+                                                      
                     if(e.response.status === 401){
                     this.logout();
                 }
-                this.$Progress.finish();
+                     this.loader = false;
                 })
             }
-        },
-        collapseAlElements: function () {
-                serverBus.$emit('collapseAlElements');              
         },
         onChangeSavedTemplate(templateShortName)
         {
@@ -293,21 +352,19 @@ export default {
         },
         onChangeScriptLanguage: function(language){
 
-            this.$Progress.start()
+            this.loader = true;
             templatesService.getAll(language)
             .then(response => { 
-                this.$Progress.finish();
-                this.loading = true;
+                this.loader = false;
                 this.templates = response.data;
             })
             .catch(e => {
                 if(e.response.status === 401){
+                     this.loader = false;
                     this.logout();
                 }
             })
-        },
-        showAllElements: function () {
-                    serverBus.$emit('showAllElements');              
+             this.loader = false;
         },
         preselectLeft: function () {
                     serverBus.$emit('preselectLeft');              
@@ -324,6 +381,14 @@ export default {
                         this.hideBackCalcsText = 'Hide BackCalcs';    
                     }
         },
+        collapseExpandGroups: function () {
+                    if(this.collapsedAll){
+                        serverBus.$emit('showAllElements'); 
+                    }else{
+                        serverBus.$emit('collapseAlElements');
+                    }
+                    this.collapsedAll = !this.collapsedAll;
+        },
         changeTepmlateDivs(value)
         {
             alert(value);
@@ -333,7 +398,9 @@ export default {
         },
         saveTemplate(isRight)
         {       
-                var templateName = prompt("Please enter name of saving template");
+            var templateName = prompt(this.getCulture("SavePromptMessage"));
+            
+            this.loader = true; 
                 
                     const env = 'http://shine15-001-site1.btempurl.com';
                     //const env = 'https://localhost:44358';
@@ -349,26 +416,30 @@ export default {
                     userId: this.userId
                 }, auth)
                 .then(response => {
-                    
+                    this.loader = false;
+                    alert("Template has been successfully saved");
                 })
                 .catch(e => {
+                    this.loader = false;
                     alert("Error is occured, please try again. Error: " + e.toString());
                 });
                 }
         
     },
     created() {
-        this.$Progress.start()
-        templatesService.getAll()
+        this.loader = true;
+        templatesService.getAll($cookies.get('lng'))
             .then(response => { 
-                this.$Progress.finish();
-                this.loading = true;
+                this.loader = false;
                 this.templates = response.data;
             })
             .catch(e => {
-                if(e.response.status === 401){
+                 this.loader = false;
+                if(e.response.status === 401 || e.response.status === 400){
                     this.logout();
                 }
+
+
             })
     },
     props: {

@@ -30,6 +30,24 @@
                                     <div class="alert alert-danger loginFailedMessage" role="alert">Login failed! Please try again...</div>
                                     </div>
                                 </div>
+
+                                <div class="form-group" style="color: #4a76a8">
+                                 <div class="row" style="margin: 0px; align-items: center;">
+                                <div class="col-sm-4" style="padding: 2px !important;">
+                                    Language
+                                    </div>
+                                  <div class="col-sm-8" style="margin-bottom: 3px !important; padding: 5px !important">
+                             <form v-on:submit.prevent="send">                                                                                             
+                <b-form-select v-model="languageValue" class="mb-3" >
+  <option v-for="option in languageOptions" v-bind:key="option.value" v-bind:value="option.value">
+    {{ option.text }}
+  </option>
+<span>Selected: {{ selected }}</span>
+                </b-form-select>
+            </form>
+         </div>
+  </div>
+   </div>
                               
                             </form>
                        <button class="btn btn-success float-right" v-on:click="tryLogin('/items')" style="backgroundColor: #4a76a8" id="btnLogin">Login</button>
@@ -58,7 +76,12 @@ export default {
         password: '',
         wrongloginData: false,
         missedLogin: false,
-        missedPassword: false
+        missedPassword: false,
+        languageValue: 'pol',
+        languageOptions: [
+            { text: 'Polski', value: 'pol' },
+            { text: 'English', value: 'eng' }
+        ],
     }),
     methods: {
        tryLogin(rootName) {
@@ -73,8 +96,8 @@ export default {
                this.missedPassword = true;
            }
            if(this.login !== '' && this.password !== ''){
-            const env = 'http://shine15-001-site1.btempurl.com';
-            //const env = 'https://localhost:44358';
+            //const env = 'http://shine15-001-site1.btempurl.com';
+            const env = 'https://localhost:44358';
             const auth = {
                 'Content-Type': 'application/json;',
                         'Access-Control-Allow-Origin': '*',
@@ -88,6 +111,7 @@ export default {
                     if(response.data !== ""){
                         VueCookies.set('userId', response.data.userId);
                         VueCookies.set('token', response.data.token);
+                        VueCookies.set('lng', this.languageValue);
                         this.$router.push(rootName);
                     }
                     else{
@@ -102,6 +126,7 @@ export default {
        }
     },
     created() {  
+        
     }
 }
 </script>

@@ -275,6 +275,10 @@ body {
 {
    display: block;   
 }
+.showForMobile
+{
+   display: none;
+}
 
 @media only screen and (max-width: 768px) {
    /* For mobile phones: */
@@ -317,6 +321,16 @@ body {
 .itemDetailsValue.itemDetailsValueCheckBoxDiv
 {
    margin-top: 3px;
+}
+
+.hideForMobile
+{
+   display: none
+}
+
+.showForMobile
+{
+   display: block;
 }
 
 }

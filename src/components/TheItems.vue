@@ -1,5 +1,10 @@
 <template>
 <div class="page">
+    <div v-if="loader">
+     <div class="text-info d-flex align-items-center justify-content-center mb-3 modal">
+    <b-spinner style="width: 5rem; height: 5rem;" label="Loading..."></b-spinner>
+  </div>
+      </div>
     <div v-if="navbarVisible">
     </div>
     <div class="row">
@@ -92,15 +97,18 @@
     v-bind:class="{ OneLineTitle:  !showAllTextCollection.includes('title' + itemDetails.numID)}"
     @click="calculateShowAllTextForItems('title' + itemDetails.numID)"/>
   <div class="itemDetailsValue itemDetailsValueCheckBoxDiv">
-  <input class="itemDetailsValueCheckBox" :disabled="loading" type="checkbox"
+  <input class="itemDetailsValueCheckBox" type="checkbox"
    @change="recalculate(itemDetails.groupID, itemDetails.numID, itemDetails.value)" 
    :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" v-model="itemDetails.value"/>
   </div>
 </div>
+<div v-else-if="itemDetails.type === 'HTML' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
+  <div v-html="itemDetails.value"></div>
+</div>
 <div v-else-if="itemDetails.type === 'Combo' && itemDetails.isGroupVisible === true" class="d-flex justify-content-center elementRaw">
      <label  class = "itemDetailsTitle" v-text = "itemDetails.title"/>
      <div class="itemDetailsValue itemDetailsTitleText elementDiv">
-      <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control" :disabled="loading" v-model="itemDetails.NameVarible"
+      <select :id="'id= ' + itemDetails.numID + ' grpId: ' + itemDetails.groupID" class="itemDetailsTitleText form-control"  v-model="itemDetails.NameVarible"
       @change="recalculate(itemDetails.groupID, itemDetails.numID, '', true, $event)"> 
         <option :value="selected" disabled hidden>-- Please select --</option>
         <option   
@@ -137,6 +145,7 @@ import {
     serverBus
 } from '../main.js';
 import VueCookies from 'vue-cookies'
+import ModifyObjectRecursively from 'modify-object-recursively';
 
 export default {
     name: 'TheItems',
@@ -148,7 +157,7 @@ export default {
         mainCollection: [],
         leftMainCollection: [],
         rightMainCollection: [],
-        loading: false,
+        loader: false,
         backCalcsHidden: true,
         navbarVisible: true,
         navbarVisibleText: 'show',
@@ -160,9 +169,7 @@ export default {
     }),
     methods: {
         recalculate: function (groupId, itemId, value, isComboBox, e, indexOfComboItem) {
-
-            this.$Progress.start();
-            this.loading = true;
+            this.loader = true;
 
             if(isComboBox === true){
                 var childNodes = e.currentTarget.childNodes;
@@ -212,7 +219,7 @@ export default {
                 })
                 .then(response => {
 
-                    
+                    this.loader = false;
 
                      var updatedItems = response.data.item2;
                     var updatedGroupItems = response.data.item1;
@@ -266,15 +273,14 @@ export default {
                 }else{
                      this.leftMainCollection = this.mainCollection;
                 }
-                    this.loading = false;
-                    this.$Progress.finish();
+                   
 
                 })
                 .catch(e => {
-                    this.loading = false;
                     console.log("exception is occured: " + e);
-                    this.$Progress.fail();
+                    this.loader = false;
                 })
+                
         },
         hideNavbar() {
                 this.navbarVisibleText = '';
@@ -301,9 +307,7 @@ export default {
                this.showAllTextCollection.push(numID);
             }   
         },
-        changeBackCalcsButton(hidden){
-
-        },
+       
         preselect(isRightTemplate)
         {
 
@@ -314,7 +318,7 @@ export default {
           'Authorization': 'Bearer ' + $cookies.get('token')
 }           
             const env = 'http://shine15-001-site1.btempurl.com';
-            // const env = 'https://localhost:44358';
+             //const env = 'https://localhost:44358';
             axios.post(env + '/api/Calculations/Preselection', {
                     isRightTemplate: isRightTemplate,
                     preselectionEnabled: true,
@@ -380,14 +384,12 @@ export default {
                 }else{
                      this.leftMainCollection = this.mainCollection;
                 }
-                    this.loading = false;
-                    this.$Progress.finish();
+                    this.loader = false;
 
                 })
                 .catch(e => {
-                    this.loading = false;
+                    this.loader = false;
                     console.log("exception is occured: " + e);
-                    this.$Progress.fail();
                 })
                 
         }, 
@@ -429,10 +431,16 @@ export default {
                 }
         },
         templateOnLoad(mainCollection){
+            try
+            {
               this.mainCollection = mainCollection;
                 this.mainCollection.forEach(itemGroup => {
-
+                    itemGroup.treeViewData = [];
                             itemGroup.items.forEach(item => {
+
+                                var items2 = [];
+                                var items3 = [];
+
                                 if (item.type === 'Combo' && item.isVisible === true)
                                 {
                                         item.comboItems.forEach(comboItem => {
@@ -445,23 +453,32 @@ export default {
                                             this.updateComboItems(item.comboItems, 1);
                                         }
                                 }
-                            })
+                            });
+                           
                         });  
+            }
+             catch {
+                    console.log("exception is occured");
+                    this.loader = false;
+                }
         }
         
     },
     created() {
             serverBus.$on('itemsGroupLeft', (mainCollection) => {
                 //this.isRightTemplate = false;
-               // alert("ok");
-                this.leftMainCollection = mainCollection;
+                    this.loader = true; 
+                    this.leftMainCollection = mainCollection;
                     this.templateOnLoad(mainCollection);
+                    this.loader = false;
             }),
             serverBus.$on('itemsGroupRight', (mainCollection) => {
                 //this.isRightTemplate = true;
                    // alert("ok");  
-                this.rightMainCollection = mainCollection;
-                    this.templateOnLoad(mainCollection);      
+                    this.loader = true;
+                    this.rightMainCollection = mainCollection;
+                    this.templateOnLoad(mainCollection);     
+                    this.loader = false; 
             }),
             serverBus.$on('collapseAlElements', () => {
             if(this.isRightTemplate){
