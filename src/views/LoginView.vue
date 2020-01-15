@@ -124,9 +124,6 @@ export default {
            }
 
        }
-    },
-    created() {  
-        
     }
 }
 </script>
