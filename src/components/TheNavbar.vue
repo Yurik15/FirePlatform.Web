@@ -12,11 +12,12 @@
     
 
                  <ul class="navbar-nav mr-auto" style="text-align: left; max-height: 400px; overflow: auto; " >
-
+            
                 <li class="nav-item dropdown menuDropDown">
                     <a class="nav-link navibarText" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <img style="height: 25px;" src="../assets/scripts.png">
         </a>
+       
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li no-body v-for="(template, index) in templates" v-bind:value="template.shortName" :key="index">
                             <button class="dropdown-item " type="button" v-on:click="getTemplate(template, true)">{{template.shortName}}</button>
@@ -25,11 +26,9 @@
                 </li>
                 
                 </ul>
-        
-
-        <div  style="text-align: center" v-if="this.isRightTemplate === true">           
-                   <span class="menuDefault" style="color: white; font-weight: 600px; font-size: 20px; font-style: italic;">{{selectedTemplateNameRight}}</span>
-                   </div>
+                <div style="text-align: center;">
+     <span class="menuMobile" style="text-align: center;text-overflow: ellipsis;overflow: hidden; white-space: nowrap;color: white; font-weight: 400px; font-size: 15px; font-style: tense;">{{selectedTemplateNameRight}}</span>
+     </div>
  <div  v-if="this.isRightTemplate === true">
                         </div>
                     <div style="text-align: right">
@@ -283,31 +282,36 @@ export default {
         selectedSavedTemplateName: "",
         selectSavedTemplatesLastChanged: "",
         selectedSavedTemplateName: null,
-        collapsedAll: false
+        collapsedAll: false,
+        loader: false
     }),
     methods: {
-          isMobile() {
+       /*   isMobile() {
    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
      return true
    } else {
      return false
-   }},
+   }},*/
     getCulture(value)
     {
         return Culture.getValue(value, $cookies.get('lng'));
     },
     getTemplate: function (template, isRightTemplate) {
+
+            this.loader = true;
+
             if(isRightTemplate){
                 this.selectedTemplateNameRight = template.shortName;
             }else{
                 this.selectedTemplateName = template.shortName;
             }
             
-            var compressedTemplateFromCookies = JSON.parse(localStorage.getItem('template_' + template.shortName));
+            /*var compressedTemplateFromCookies = JSON.parse(localStorage.getItem('template_' + template.shortName));
             var currentTemplate = LZString.decompress(compressedTemplateFromCookies);
             if(currentTemplate && this.selectSavedTemplatesLastChanged !== template.shortName){
                 currentTemplate = JSON.parse(currentTemplate);
                 templatesService.clearTemplateDataPerUser(template, isRightTemplate);
+                
                 
                 if(isRightTemplate){
                         serverBus.$emit('itemsGroupRight', currentTemplate);
@@ -319,21 +323,23 @@ export default {
                 if(this.selectSavedTemplatesLastChanged === template.shortName){
                     template.savedName = this.selectedSavedTemplateName;
                 }
-                 
+                */
+                 var responseData = null;
+
                 templatesService.loadTemplatesData(template, isRightTemplate, $cookies.get('lng'))
                 .then(response => {
+                    this.loader = false;
 
-                    var responseData = response.data;
-                    var compressedData = LZString.compress(JSON.stringify(responseData));
+                    responseData = response.data;
+                    /*var compressedData = LZString.compress(JSON.stringify(responseData));
                     localStorage.setItem('template_' + template.shortName, JSON.stringify(compressedData));
-                    
+                    */
                     if(isRightTemplate){
                         serverBus.$emit('itemsGroupRight', responseData);
                     }else {
                         serverBus.$emit('itemsGroupLeft', responseData);
                     }
-                    this.loader = false;
-
+                  
                 }
                 )
                 .catch(e => {      
@@ -342,9 +348,8 @@ export default {
                     if(e.response.status === 401){
                     this.logout();
                 }
-                     this.loader = false;
                 })
-            }
+            //}
         },
         onChangeSavedTemplate(templateShortName)
         {
@@ -352,7 +357,7 @@ export default {
         },
         onChangeScriptLanguage: function(language){
 
-            this.loader = true;
+           // this.loader = true;
             templatesService.getAll(language)
             .then(response => { 
                 this.loader = false;
@@ -438,7 +443,7 @@ export default {
                 if(e.response.status === 401 || e.response.status === 400){
                     this.logout();
                 }
-
+            
 
             })
     },

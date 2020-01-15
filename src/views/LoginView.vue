@@ -96,13 +96,13 @@ export default {
                this.missedPassword = true;
            }
            if(this.login !== '' && this.password !== ''){
-            const env = 'http://shine15-001-site1.btempurl.com';
-            //const env = 'https://localhost:44358';
-            const auth = {
-                'Content-Type': 'application/json;',
+                //const env = 'http://shine15-001-site1.btempurl.com';
+                const env = 'https://localhost:44358';
+                const auth = {
+                        'Content-Type': 'application/json;',
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'GET, POST' 
-            }
+                }
             axios.post(env + '/api/Account/Login', {
                     login: this.login,
                     password: this.password

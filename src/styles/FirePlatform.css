@@ -325,7 +325,7 @@ body {
 
 .hideForMobile
 {
-   display: none
+   display: none;
 }
 
 .showForMobile
@@ -335,5 +335,4 @@ body {
 
 }
 
- 
 

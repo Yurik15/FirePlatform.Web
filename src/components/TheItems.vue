@@ -319,7 +319,7 @@ export default {
           'Authorization': 'Bearer ' + $cookies.get('token')
 }           
             const env = 'http://shine15-001-site1.btempurl.com';
-             //const env = 'https://localhost:44358';
+            //const env = 'https://localhost:44358';
             axios.post(env + '/api/Calculations/Preselection', {
                     isRightTemplate: isRightTemplate,
                     preselectionEnabled: true,
@@ -468,18 +468,16 @@ export default {
     created() {
             serverBus.$on('itemsGroupLeft', (mainCollection) => {
                 //this.isRightTemplate = false;
-                    this.loader = true; 
+                    this.loader = false;
                     this.leftMainCollection = mainCollection;
                     this.templateOnLoad(mainCollection);
-                    this.loader = false;
             }),
             serverBus.$on('itemsGroupRight', (mainCollection) => {
                 //this.isRightTemplate = true;
                    // alert("ok");  
-                    this.loader = true;
+                    this.loader = false;
                     this.rightMainCollection = mainCollection;
                     this.templateOnLoad(mainCollection);     
-                    this.loader = false; 
             }),
             serverBus.$on('collapseAlElements', () => {
             if(this.isRightTemplate){
