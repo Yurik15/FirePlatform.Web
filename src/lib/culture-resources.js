@@ -22,7 +22,7 @@ export default {
         {
             key: "Scripts",
             valueEng: "Scripts",
-            valuePol: "Skrypty"
+            valuePol: "Lista skryptów"
         },
         {
             key: "Options",
@@ -40,6 +40,16 @@ export default {
             valuePol: "Domyślny wybór"
         },
         {
+            key: "Please select",
+            valueEng: "--Please select--",
+            valuePol: "-Wybierz wartość-"
+        },
+        {
+            key: "Select saved",
+            valueEng: "--Select saved--",
+            valuePol: "-Wybierz zachowane-"
+        },
+        {
             key: "Logout",
             valueEng: "Logout",
             valuePol: "Wyloguj"
@@ -48,6 +58,11 @@ export default {
             key: "SavePromptMessage",
             valueEng: "Please enter name of saving template",
             valuePol: "Proszę o wprowadzenie nazwy skryptu"
+        },
+        {
+            key: "Show scripts/definition",
+            valueEng: "Show scripts/definition",
+            valuePol: "Pokaż listę/skrypt"
         }
     ]
 }

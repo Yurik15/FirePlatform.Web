@@ -50,6 +50,7 @@
    </div>
                               
                             </form>
+                            
                        <button class="btn btn-success float-right" v-on:click="tryLogin('/items')" style="backgroundColor: #4a76a8" id="btnLogin">Login</button>
                         </div>
                     </div>
@@ -57,6 +58,9 @@
             </div>
         </div>
     </div>
+    <div style="position: absolute; bottom: 10px; right: 0;  left: 10px; ">
+            {{this.appVersion}}
+  </div>
 </div>
 </template>
 
@@ -82,6 +86,7 @@ export default {
             { text: 'Polski', value: 'pol' },
             { text: 'English', value: 'eng' }
         ],
+        appVersion: 'v1.0.0'
     }),
     methods: {
        tryLogin(rootName) {
@@ -97,22 +102,29 @@ export default {
            }
            if(this.login !== '' && this.password !== ''){
                 const env = 'http://shine15-001-site1.btempurl.com';
-                //const env = 'https://localhost:44358';
+                //const env = 'http://localhost:59548/';
                 const auth = {
                         'Content-Type': 'application/json;',
                         'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'GET, POST' 
+                        'Access-Control-Allow-Methods': '*'
                 }
             axios.post(env + '/api/Account/Login', {
                     login: this.login,
                     password: this.password
                 }, auth)
                 .then(response => {
-                    if(response.data !== ""){
-                        VueCookies.set('userId', response.data.userId);
-                        VueCookies.set('token', response.data.token);
+                    let data = response.data;
+
+                    if(data !== ""){
+                        VueCookies.set('userId', data.userId);
+                        VueCookies.set('token', data.token);
                         VueCookies.set('lng', this.languageValue);
-                        this.$router.push(rootName);
+
+                        if(data.isAdmin){
+                            this.$router.push("/admin");
+                        }else{
+                            this.$router.push(rootName);
+                        }
                     }
                     else{
                         this.wrongloginData = true;

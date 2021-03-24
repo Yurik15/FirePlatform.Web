@@ -1,24 +1,26 @@
 <template>
 <div>
-<div class="hideForMobile">
-<splitpanes class="default-theme"  style="height: 100%; min-height: 100vh;">
-  <pane>
+<div class="hideForMobile" >
+<splitpanes class="default-theme"  style="width: 100%;height: 100%; min-height: 50vh;">
+  <pane size="27">
     <span>
-          <TheNavbar :isRightTemplate='false'></TheNavbar>
-          <TheItems :isRightTemplate='false'></TheItems>
+    <TheNavbar :templateID=0></TheNavbar>
     </span>
   </pane>
-  <pane>
+    <pane size="46">
     <span>
-        <TheNavbar :isRightTemplate='true'></TheNavbar>
-          <TheItems :isRightTemplate='true'></TheItems>
+      <TheNavbar :templateID=1></TheNavbar>
+    </span>
+  </pane>
+  <pane size="27">
+    <span>
+      <TheNavbar :templateID=2></TheNavbar>
     </span>
   </pane>
 </splitpanes>
 </div>
-<div class="showForMobile">
-          <TheNavbar :isRightTemplate='true'></TheNavbar>
-          <TheItems :isRightTemplate='true'></TheItems>
+<div class="showForMobile"> 
+          <TheNavbar :templateID='2' :isMobile='true'></TheNavbar>
   </div>
 </div>
 </template>
@@ -29,7 +31,7 @@ import 'splitpanes/dist/splitpanes.css'
 import axios from 'axios'
 import TheItems from '@/components/TheItems.vue'
 import TheNavbar from '@/components/TheNavbar.vue'
-import vue2 from '@/components/vue2.vue'
+
 import {
     serverBus
 } from '../main.js';
@@ -41,8 +43,7 @@ export default {
         TheItems,
         TheNavbar,
         Splitpanes,
-        Pane,
-        vue2
+        Pane
     },
     data: () => ({
         SEPARATOR: 'sepComboItem',
@@ -53,11 +54,25 @@ export default {
         navbarVisibleText: 'show',
         showAllTextCollection: [],
         userId: $cookies.get('userId'),
-        token: $cookies.get('token'),
-        leftDivWidthPercent: 49,
-        rightDivWidthPercent: 49,
+        token: $cookies.get('token')
     }),
+    ready: function () {
+  window.addEventListener('resize', this.handleResize)
+},
+beforeDestroy: function () {
+  window.removeEventListener('resize', this.handleResize)
+},
     methods: {
     }
 }
 </script>
+<style>
+
+.splitpanes__pane {
+
+  position: relative;
+}
+
+
+
+</style>

@@ -2,7 +2,7 @@ import Axios from 'axios';
  
 const RESOURCE_NAME = '/api';
 const env = 'http://shine15-001-site1.btempurl.com';
-//const env = 'https://localhost:44358/';
+//const env = 'http://localhost:59548';
   
 export default {
   getAll(language) {
@@ -10,7 +10,17 @@ export default {
     if(!language){
       language = 'pol';
     }
-    return Axios.get(env + RESOURCE_NAME + '/Calculations/LoadTemplates?language=' + language + '&userId=' + $cookies.get('userId'),
+
+    const auth = {
+      headers: {
+      'Content-Type': 'application/json;',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST',
+          'Authorization': 'Bearer ' + $cookies.get('token')
+      }
+    }
+
+    return Axios.get(env + RESOURCE_NAME + '/Admin/LoadTemplates?language=' + language + '&userId=' + $cookies.get('userId'),
       {
       headers: {
         'Accept': 'application/json',
@@ -19,16 +29,16 @@ export default {
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
       }
-      });
+      }, auth);
   },
-  clearTemplateDataPerUser(template, isRightTemplate)
+  clearTemplateDataPerUser(template, templateID)
   {
     const auth = {
       'Content-Type': 'application/json;',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
-}
+ }
 
       axios.post(env + '/api/Calculations/ClearTemplates', {
         userId: $cookies.get('userId'),
@@ -37,18 +47,19 @@ export default {
         longName:template.longName,
         stage :template.stage,
         topic : template.topic,
-        isRightTemplate: isRightTemplate
+        templateGuiID: templateID
     }, auth)
   },
-  loadTemplatesData(template, isRightTemplate, languageValue)
+  loadTemplatesData(template, templateID, languageValue)
   {
     const auth = {
+      headers: {
       'Content-Type': 'application/json;',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST',
           'Authorization': 'Bearer ' + $cookies.get('token')
+      }
 }
-
     return  axios.post(env + '/api/Calculations/LoadTmp', {
         userId: $cookies.get('userId'),
         lng: languageValue,
@@ -57,7 +68,8 @@ export default {
         stage : template.stage,
         topic : template.topic,
         savedName: template.savedName,
-        isRightTemplate: isRightTemplate
+        link: template.link,
+        templateGuiID: templateID
     }, auth)
     
   },

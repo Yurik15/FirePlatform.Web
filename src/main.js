@@ -4,6 +4,7 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './styles/FirePlatform.css';
+import './admin/AdminView.css';
 import BootstrapVue from 'bootstrap-vue';
 import { Collapse } from 'bootstrap-vue/es/components';
 import Axios from 'axios';
@@ -12,9 +13,20 @@ import VueProgressBar from 'vue-progressbar';
 import VueRouter from 'vue-router'
 import routes from './routes';
 import VueCookies from 'vue-cookies';
+import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+import 'vue-material/dist/theme/default.css'
+import MenuIcon from 'vue-material-design-icons/Menu.vue';
+import 'vue-material-design-icons/styles.css';
+ 
+Vue.component('menu-icon', MenuIcon);
 
 Vue.use(require('vue-cookies'))
 Vue.use(VueCookies)
+
+Vue.use(MdButton)
+Vue.use(MdContent)
+Vue.use(MdTabs)
 
 // set default config
 VueCookies.config('7d')
@@ -50,6 +62,7 @@ export const serverBus = new Vue();
 new Vue({
   router,
   render: h => h(App),
+  template: '<menu-icon />'
 }).$mount('#app')
 
 // Intercept all requests

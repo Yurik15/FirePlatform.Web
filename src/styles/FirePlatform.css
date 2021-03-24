@@ -119,10 +119,24 @@ input[type=checkbox]
     background-color: white !important;
 }
 
+.customColor {
+   color: white !important;
+   background-color: #4a76a8 !important;
+}
+
 .navibarText
 {
     color: white !important;
 }
+.hideScrollChrome::-webkit-scrollbar {
+   display: none !important;
+ }
+ 
+ /* Hide scrollbar for IE, Edge and Firefox */
+ .hideScrollOther {
+   -ms-overflow-style: none !important;  /* IE and Edge */
+   scrollbar-width: none !important;  /* Firefox */
+ }
 
 .navibarLogo
 {
@@ -147,6 +161,10 @@ input[type=checkbox]
 
    margin-top: none;
 
+}
+
+.paddingBottom5px{
+   padding-top: 6px !important;
 }
 
 .itemDetailsTitleText .form-control
@@ -183,7 +201,7 @@ input[type=checkbox]
    font-size: 15px !important; 
    font-weight: 600;  
    text-align: left;
-   padding-left: 20%;
+   padding-left: 1.5%;
    border-radius: 0px 0px 0px 0px;
    
 }
@@ -228,10 +246,64 @@ height: 100vh;
     overflow: scroll;
 }
 
-.cardList{
-   margin-top: 60px !important;
+.navbar-brand.btn{
+   margin: 1px;
+   padding: 5px;
 }
 
+.navbar-brand.dropdown.menuDropDown{
+   margin: 1px;
+   padding: 5px;
+}
+
+.navbarPadding{
+   padding-left: 1px;
+}
+
+.nav-link.navibarText{
+   margin: 1px !important;
+   padding: 1px !important;
+}
+
+.navbarFixedTopParent
+{
+   z-index:999;   
+   position: fixed;
+   
+   text-align: center;
+   top: 0px;
+}
+.navbar.fixed-top.navbar-expand-lg.navbar-dark.bg-dark
+{
+   padding-left: 7px;
+   padding-right: 7px;
+}
+
+.navbarFixedTopParent .navbarFixedTop
+{
+   position: relative;
+   z-index:999;               
+   left: 0px;
+   top: 0px;
+}
+
+.navbarFixedTopParent .navbarFixedTop2
+{
+   position: relative;
+   z-index:999;               
+   left: 0px;
+   top: 0px;
+}
+
+.cardList{
+   margin-top: 52px !important;
+   height: 100vh !important;
+}
+
+.list-group-item:first-child {
+   border-top-left-radius: 0.00rem;
+    border-top-right-radius: 0.00rem;
+}
 
 .btn:focus, .btn:active:focus, .btn.active:focus {
    box-shadow: none !important;
@@ -273,12 +345,35 @@ body {
 }
 .menuDefault
 {
-   display: block;   
+   text-overflow: ellipsis;
+   overflow: hidden; 
+   white-space: nowrap;
+   color: white; 
+   font-weight: 600px; 
+   font-size: 16px; 
 }
 .showForMobile
 {
    display: none;
 }
+
+.splitpanes__splitter
+{
+   background-color: #4a76a8 !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideScroll::-webkit-scrollbar {
+   display: none;
+ }
+ 
+ /* Hide scrollbar for IE, Edge and Firefox */
+ .hideScroll {
+   -ms-overflow-style: none;  /* IE and Edge */
+   scrollbar-width: none;  /* Firefox */
+ }
+
+/*--------------------------------------------MOBILE VIEW--------------------------------------------------------------*/
 
 @media only screen and (max-width: 768px) {
    /* For mobile phones: */
@@ -333,6 +428,31 @@ body {
    display: block;
 }
 
+.col-sm-12.mainSection
+{
+   margin-left: 0px !important;
+   height: 100vh;
 }
+
+.hamburgerData
+{
+   border-bottom: 0.1px solid lightsteelblue !important;
+}
+
+.cardList{
+   margin-top: 54px !important;
+}
+
+.menuCheckBox
+{
+   margin-left: 12px;
+    margin-top: 8px;
+    margin-bottom: -2px;
+}
+
+}
+
+
+/*--------------------------------------------END MOBILE VIEW--------------------------------------------------------------*/
 
 
